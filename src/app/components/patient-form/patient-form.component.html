@@ -24,6 +24,7 @@
             type="text"
             formControlName="ID"
             placeholder="Ingrese la cédula del paciente"
+            maxlength="10"
             [readOnly]="!isNewPatient"
           />
           @if (ID?.errors && ID?.touched) {
@@ -43,11 +44,16 @@
             formControlName="name"
             placeholder="Ingrese el nombre del paciente"
           />
-          @if (name?.errors && name?.touched) {
+          @if (name?.errors && name?.touched) { @if (name?.hasError('required'))
+          {
           <p [class.error]="name?.errors && name?.touched" class="error-form">
             *Campo requerido
           </p>
-          }
+          } @if (name?.hasError('pattern')) {
+          <p [class.error]="name?.errors && name?.touched" class="error-form">
+            *No pueden haber números o caracteres especiales
+          </p>
+          } }
         </div>
       </div>
 
@@ -58,15 +64,20 @@
             (keypress)="patientsService.onKeyPress($event)"
             id="age"
             type="text"
+            maxlength="2"
             formControlName="age"
             placeholder="Ingrese la edad del paciente"
           />
         </div>
-        @if (age?.errors && age?.touched) {
+        @if (age?.errors && age?.touched) { @if (age?.hasError('required')) {
         <p [class.error]="age?.errors && age?.touched" class="error-form">
           *Campo requerido
         </p>
-        }
+        } @if (age?.hasError('min')) {
+        <p [class.error]="age?.errors && age?.touched" class="error-form">
+          *La edad no puede ser 0
+        </p>
+        } }
       </div>
 
       <div class="form-field" [class.error]="phone?.errors && phone?.touched">
@@ -76,14 +87,20 @@
             (keypress)="patientsService.onKeyPress($event)"
             id="phone"
             type="text"
+            maxlength="10"
             formControlName="phone"
             placeholder="Ingrese el teléfono del paciente"
           />
-          @if (phone?.errors && phone?.touched) {
+          @if (phone?.errors && phone?.touched) { @if
+          (phone?.hasError('required')) {
           <p [class.error]="phone?.errors && phone?.touched" class="error-form">
             *Campo requerido
           </p>
-          }
+          } @if (phone?.hasError('pattern')) {
+          <p [class.error]="phone?.errors && phone?.touched" class="error-form">
+            *Debe ingresar un número válido
+          </p>
+          } }
         </div>
       </div>
 

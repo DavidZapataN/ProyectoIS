@@ -191,6 +191,10 @@ export class HomeComponent implements OnInit {
       });
     }
 
+    if (this.patientsService.patients().length <= 0) {
+      this.patientsService.patients.set(this.getActivePatients());
+    }
+
     this.NotificationType = NotificationType.Success;
     this.message = 'Paciente actualizado correctamente';
     this.isNotification = true;

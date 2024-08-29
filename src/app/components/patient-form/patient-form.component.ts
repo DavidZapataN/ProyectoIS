@@ -46,9 +46,9 @@ export class PatientFormComponent implements OnInit {
 
   patientForm = this.formBuilder.group({
     ID: ['', Validators.required],
-    name: ['', Validators.required],
-    age: ['', Validators.required],
-    phone: ['', Validators.required],
+    name: ['', [Validators.required, Validators.pattern('^[a-zA-Z\\s]+$')]],
+    age: ['', [Validators.required, Validators.min(1)]],
+    phone: ['', [Validators.required, Validators.pattern(/3[0-9]{9}/)]],
     gender: ['', Validators.required],
     status: ['ACTIVE', Validators.required],
   });
