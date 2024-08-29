@@ -1,9 +1,12 @@
 .wrapper {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   background-color: var(--background);
   display: flex;
   flex-direction: column;
+  padding-bottom: 0.5rem;
+  overflow: hidden;
 }
 
 .header {
@@ -36,11 +39,56 @@
 .filters {
   box-sizing: border-box;
   padding: 2rem 1rem;
-}
+  display: flex;
+  align-items: flex-end;
+  gap: 3rem;
 
-.options {
-  box-sizing: border-box;
-  padding: 1rem;
+  .form-group {
+    label {
+      font-size: 1.6rem;
+    }
+
+    div {
+      display: flex;
+      input,
+      select {
+        all: unset;
+        padding: 1.2rem 1.4rem;
+        border: 1.5px solid #ccc;
+        font-family: var(--main-font);
+        width: 14rem;
+        font-size: 1.6rem;
+        border-radius: 5px 0 0px 5px;
+        margin-right: -1px;
+        &:focus {
+          border: 1.5px solid var(--primary-color);
+        }
+      }
+
+      select {
+        height: 2rem;
+        display: flex;
+        align-items: center;
+      }
+
+      button {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 5rem;
+        padding: 0.5rem 1.2rem;
+        border-radius: 0 5px 5px 0;
+        border: 1.5px solid var(--primary-color);
+        background-color: var(--primary-color);
+
+        span {
+          color: white;
+          font-size: 2.8rem;
+        }
+      }
+    }
+  }
 }
 
 .table-container {

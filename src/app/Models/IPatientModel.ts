@@ -1,7 +1,7 @@
 import { IAppointmentModel } from './IAppointmentModel';
 
 export interface IPatientModel {
-  id: number;
+  id: string;
   name: string;
   age: string;
   phone: string;

@@ -9,17 +9,59 @@
   @if (patientsService.patients().length > 0) {
   <div class="filters">
     <div class="form-group">
-      <label for="">Buscar por cédula</label>
+      <label for="ID">Buscar por cédula</label>
       <div>
-        <input type="text" />
-        <button></button>
+        <input
+          (keyup.enter)="searchById()"
+          (keypress)="patientsService.onKeyPress($event)"
+          [(ngModel)]="searchIdQuery"
+          id="ID"
+          type="text"
+          placeholder="Cédula"
+        />
+        <button (click)="searchById()">
+          <span class="material-symbols-outlined"> search </span>
+        </button>
       </div>
     </div>
-  </div>
 
-  <div class="options">
+    <div class="form-group">
+      <label for="name">Buscar por nombre</label>
+      <div>
+        <input
+          (keyup.enter)="searchByName()"
+          [(ngModel)]="searchNameQuery"
+          id="name"
+          type="text"
+          placeholder="Nombre"
+        />
+        <button (click)="searchByName()">
+          <span class="material-symbols-outlined"> search </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="gender">Buscar por sexo</label>
+      <div>
+        <select
+          (change)="searchByGender()"
+          [(ngModel)]="searchGenderQuery"
+          id="gender"
+          type="text"
+        >
+          <option value="all">Todos</option>
+          <option value="MALE">Hombres</option>
+          <option value="FEMALE">Mujeres</option>
+        </select>
+        <button (click)="searchByGender()">
+          <span class="material-symbols-outlined"> search </span>
+        </button>
+      </div>
+    </div>
+
     <button (click)="viewPatientForm('NEW')" class="btn-primary">
-      Crear nuevo cliente
+      Crear nuevo paciente
     </button>
   </div>
 
@@ -92,10 +134,10 @@
 <!--  -->
 @if (isNotification) {
 <app-notification
-(close)="closeNotification()"
+  (close)="closeNotification()"
   [message]="message"
   [duration]="7000"
-  [type]="NotificationType.Success"
+  [type]="NotificationType"
 ></app-notification>
 }
 

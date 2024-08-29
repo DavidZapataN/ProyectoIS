@@ -14,11 +14,17 @@ import { IPatientModel } from '../../Models/IPatientModel';
 import { IAppointmentModel } from '../../Models/IAppointmentModel';
 import { PatientFormComponent } from '../../components/patient-form/patient-form.component';
 import { PatientService } from '../../services/patient.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NotificationComponent, PatientFormComponent, NotificationComponent],
+  imports: [
+    NotificationComponent,
+    PatientFormComponent,
+    NotificationComponent,
+    FormsModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -26,14 +32,18 @@ export class HomeComponent implements OnInit {
   protected authService = inject(AuthService);
   protected patientsService = inject(PatientService);
 
-  NotificationType = NotificationType;
+  searchIdQuery: string = '';
+  searchNameQuery: string = '';
+  searchGenderQuery: string = 'all';
+
+  NotificationType = NotificationType.Success;
   message: string = '';
   isNotification: boolean = false;
 
   isNewPatientForm: boolean = false;
   isNewPatientInForm: boolean = true;
   patientToUpdate: IPatientModel = {
-    id: -1,
+    id: '',
     name: '',
     age: '',
     phone: '',
@@ -44,6 +54,72 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.patientsService.patients.set(this.getActivePatients());
+  }
+
+  searchById() {
+    this.isNotification = false;
+
+    if (this.searchIdQuery === '') {
+      this.patientsService.patients.set(this.getActivePatients());
+      return;
+    }
+
+    const patientsArray = this.getAllPatients();
+    const patient = patientsArray.find(
+      (p) => p.id == this.searchIdQuery && p.status == 'ACTIVE'
+    );
+
+    if (patient) {
+      this.patientsService.patients.set([patient]);
+    } else {
+      this.NotificationType = NotificationType.Warning;
+      this.message =
+        'No se encotró ningún paciente activo con ese número de cédula';
+      this.isNotification = true;
+    }
+  }
+
+  searchByName() {
+    this.isNotification = false;
+
+    if (this.searchNameQuery === '') {
+      this.patientsService.patients.set(this.getActivePatients());
+      return;
+    }
+
+    const patientsArray = this.getAllPatients();
+    const patientsFound = patientsArray.filter(
+      (patient) =>
+        patient.name
+          .toLowerCase()
+          .includes(this.searchNameQuery.toLowerCase()) &&
+        patient.status == 'ACTIVE'
+    );
+
+    if (patientsFound.length > 0) {
+      this.patientsService.patients.set(patientsFound);
+    } else {
+      this.NotificationType = NotificationType.Warning;
+      this.message = 'No se encontraron pacientes';
+      this.isNotification = true;
+    }
+  }
+
+  searchByGender() {
+    this.isNotification = false;
+
+    if (this.searchGenderQuery === '' || this.searchGenderQuery == 'all') {
+      this.patientsService.patients.set(this.getActivePatients());
+      return;
+    }
+
+    const patientsArray = this.getAllPatients();
+    const patientsFound = patientsArray.filter(
+      (patient) =>
+        patient.gender == this.searchGenderQuery && patient.status == 'ACTIVE'
+    );
+
+    this.patientsService.patients.set(patientsFound);
   }
 
   viewPatientForm(patientStatus: 'NEW' | 'TO_UPDATE', patient?: IPatientModel) {
@@ -61,7 +137,7 @@ export class HomeComponent implements OnInit {
 
   closePatientForm() {
     this.patientToUpdate = {
-      id: -1,
+      id: '',
       name: '',
       age: '',
       phone: '',
@@ -73,30 +149,24 @@ export class HomeComponent implements OnInit {
   }
 
   createPatient(patient: IPatientModel) {
+    let patientsArray: IPatientModel[] = this.getAllPatients();
+    patientsArray.push(patient);
+    localStorage.setItem('patients', JSON.stringify(patientsArray));
+
     this.patientsService.patients.update((patients) => {
       patients.push(patient);
       return patients;
     });
 
-    let patientsArray: IPatientModel[] = [];
-    const patientsString = localStorage.getItem('patients');
-    if (patientsString) {
-      patientsArray = JSON.parse(patientsString);
-    }
-    patientsArray.push(patient);
-    localStorage.setItem('patients', JSON.stringify(patientsArray));
-
+    this.NotificationType = NotificationType.Success;
     this.message = 'Paciente creado correctamente';
     this.isNotification = true;
   }
 
   updatePatient(patientToUpdate: IPatientModel) {
-    let patients: IPatientModel[] = JSON.parse(
-      localStorage.getItem('patients')!
-    );
-    const index = patients.findIndex((p) => p.id === patientToUpdate.id);
+    let patients: IPatientModel[] = this.getAllPatients();
+    const index = patients.findIndex((p) => p.id == patientToUpdate.id);
     patients[index] = patientToUpdate;
-
     localStorage.setItem('patients', JSON.stringify(patients));
 
     if (
@@ -115,6 +185,7 @@ export class HomeComponent implements OnInit {
       });
     }
 
+    this.NotificationType = NotificationType.Success;
     this.message = 'Paciente actualizado correctamente';
     this.isNotification = true;
   }
@@ -155,6 +226,13 @@ export class HomeComponent implements OnInit {
         ? current
         : earliest;
     });
+  }
+
+  getAllPatients(): IPatientModel[] {
+    const patientsString = localStorage.getItem('patients');
+    if (!patientsString) return [];
+
+    return JSON.parse(patientsString);
   }
 
   closeNotification() {

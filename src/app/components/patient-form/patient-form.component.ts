@@ -31,7 +31,7 @@ export class PatientFormComponent implements OnInit {
   @Input() isNewPatient: boolean = true;
 
   @Input() patientToUpdate: IPatientModel = {
-    id: -1,
+    id: '',
     name: '',
     age: '',
     phone: '',
@@ -45,7 +45,7 @@ export class PatientFormComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
 
   patientForm = this.formBuilder.group({
-    ID: [0, Validators.required],
+    ID: ['', Validators.required],
     name: ['', Validators.required],
     age: ['', Validators.required],
     phone: ['', Validators.required],
@@ -108,7 +108,7 @@ export class PatientFormComponent implements OnInit {
     }
   }
 
-  checkDuplicatedID(patientId: number): boolean {
+  checkDuplicatedID(patientId: string): boolean {
     let patientsArray: IPatientModel[] = [];
     const patientsString = localStorage.getItem('patients');
     if (patientsString) {
