@@ -1,0 +1,151 @@
+<div class="background">
+  <div class="modal">
+    <span (click)="closeModal()" class="material-symbols-outlined btn-close"
+      >close</span
+    >
+
+    @if (isNewPatient) {
+    <h3>Crear nuevo paciente</h3>
+    } @else {
+    <h3>Actualizar paciente</h3>
+    }
+
+    <form
+      (ngSubmit)="onSubmit()"
+      [formGroup]="patientForm"
+      class="patient-form"
+    >
+      <div class="form-field" [class.error]="ID?.errors && ID?.touched">
+        <div class="form-group">
+          <label for="ID">Cédula</label>
+          <input
+            (keypress)="patientsService.onKeyPress($event)"
+            id="ID"
+            type="text"
+            formControlName="ID"
+            placeholder="Ingrese la cédula del paciente"
+            [readOnly]="!isNewPatient"
+          />
+          @if (ID?.errors && ID?.touched) {
+          <p [class.error]="ID?.errors && ID?.touched" class="error-form">
+            *Campo requerido
+          </p>
+          }
+        </div>
+      </div>
+
+      <div class="form-field" [class.error]="name?.errors && name?.touched">
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            placeholder="Ingrese el nombre del paciente"
+          />
+          @if (name?.errors && name?.touched) {
+          <p [class.error]="name?.errors && name?.touched" class="error-form">
+            *Campo requerido
+          </p>
+          }
+        </div>
+      </div>
+
+      <div class="form-field" [class.error]="age?.errors && age?.touched">
+        <div class="form-group">
+          <label for="age">Edad</label>
+          <input
+            (keypress)="patientsService.onKeyPress($event)"
+            id="age"
+            type="text"
+            formControlName="age"
+            placeholder="Ingrese la edad del paciente"
+          />
+        </div>
+        @if (age?.errors && age?.touched) {
+        <p [class.error]="age?.errors && age?.touched" class="error-form">
+          *Campo requerido
+        </p>
+        }
+      </div>
+
+      <div class="form-field" [class.error]="phone?.errors && phone?.touched">
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input
+            (keypress)="patientsService.onKeyPress($event)"
+            id="phone"
+            type="text"
+            formControlName="phone"
+            placeholder="Ingrese el teléfono del paciente"
+          />
+          @if (phone?.errors && phone?.touched) {
+          <p [class.error]="phone?.errors && phone?.touched" class="error-form">
+            *Campo requerido
+          </p>
+          }
+        </div>
+      </div>
+
+      <div class="form-field" [class.error]="gender?.errors && gender?.touched">
+        <div class="form-group">
+          <label for="gender">Sexo</label>
+          <select formControlName="gender" id="gender">
+            <option value="" disabled selected>Seleccione el sexo</option>
+            <option value="MALE">Hombre</option>
+            <option value="FEMALE">Mujer</option>
+          </select>
+        </div>
+        @if (gender?.errors && gender?.touched) {
+        <p [class.error]="gender?.errors && gender?.touched" class="error-form">
+          *Campo requerido
+        </p>
+        }
+      </div>
+
+      @if (!isNewPatient) {
+      <div class="form-field" [class.error]="status?.errors && status?.touched">
+        <div class="form-group">
+          <label for="status">Estado</label>
+          <select formControlName="status" id="status">
+            <option value="ACTIVE">ACTIVO</option>
+            <option value="INACTIVE">INACTIVO</option>
+            <option value="CANCELED">SUSPENDIDO</option>
+          </select>
+        </div>
+        @if (status?.errors && status?.touched) {
+        <p [class.error]="status?.errors && status?.touched" class="error-form">
+          *Campo requerido
+        </p>
+        }
+      </div>
+      }
+
+      <div class="form-field schedule-appointment">
+        <label for="nextAppointment">Agendar nueva cita</label>
+        <div>
+          <input id="nextAppointment" type="date" class="calendar" />
+          <button type="button" class="btn-primary">Agendar</button>
+        </div>
+      </div>
+
+      <div class="buttons" [class.toUpdate]="!isNewPatient">
+        <div>
+          <button type="submit" class="btn-primary">Guardar</button>
+          <button (click)="closeModal()" type="button" class="btn-primary">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+@if (isNotification) {
+<app-notification
+  (close)="closeNotification()"
+  message="Un paciente con esa cédula ya está registrado"
+  [duration]="7000"
+  [type]="NotificationType.Error"
+></app-notification>
+}

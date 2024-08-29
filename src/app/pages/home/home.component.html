@@ -1,0 +1,110 @@
+<div class="wrapper">
+  <header class="header">
+    <h2 class="title">Viviana Montoya Auriculoterapia</h2>
+    <button class="logout-button" (click)="authService.logout()">
+      Cerrar Sesión
+    </button>
+  </header>
+
+  @if (patientsService.patients().length > 0) {
+  <div class="filters">
+    <div class="form-group">
+      <label for="">Buscar por cédula</label>
+      <div>
+        <input type="text" />
+        <button></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="options">
+    <button (click)="viewPatientForm('NEW')" class="btn-primary">
+      Crear nuevo cliente
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Cédula</th>
+          <th>Nombre</th>
+          <th>Edad</th>
+          <th>Teléfono</th>
+          <th>Sexo</th>
+          <th>Próxima cita</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (patient of patientsService.patients(); track $index) {
+        <tr>
+          <td>{{ patient.id }}</td>
+          <td>{{ patient.name }}</td>
+          <td>{{ patient.age }}</td>
+          <td>{{ patient.phone }}</td>
+          <td>{{ patient.gender == "MALE" ? "Hombre" : "Mujer" }}</td>
+          <td>
+            {{
+              patient.nextAppointment
+                ? patient.nextAppointment
+                : "No tiene próximas citas"
+            }}
+          </td>
+          <td style="width: 8rem">
+            <button
+              (click)="viewPatientForm('TO_UPDATE', patient)"
+              class="btn-edit-patient"
+              title="Actualizar producto"
+            >
+              <span class="material-symbols-outlined"> edit_note </span>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  } @else {
+  <div id="alert-no-list">
+    <div>
+      <span class="material-symbols-outlined"> error </span>
+      <h3>No hay pacientes activos en la aplicación</h3>
+    </div>
+
+    <button (click)="viewPatientForm('NEW')" class="btn-primary">
+      Crear nuevo paciente
+    </button>
+  </div>
+  }
+</div>
+
+@if (isNewPatientForm) {
+<patient-form
+  (updatePatient)="updatePatient($event)"
+  (savePatient)="createPatient($event)"
+  (close)="closePatientForm()"
+  [isNewPatient]="isNewPatientInForm"
+  [patientToUpdate]="patientToUpdate"
+></patient-form>
+}
+
+<!--  -->
+@if (isNotification) {
+<app-notification
+(close)="closeNotification()"
+  [message]="message"
+  [duration]="7000"
+  [type]="NotificationType.Success"
+></app-notification>
+}
+
+<!-- <label for="search-date1">
+  <p>Fecha</p>
+  <div class="form-group">
+    <input type="date" id="search-date1" class="calendar" />
+    <button>
+      <span class="material-symbols-outlined">event</span>
+    </button>
+  </div>
+</label> -->

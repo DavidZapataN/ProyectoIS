@@ -1,0 +1,77 @@
+<div class="wrapper">
+  <div class="content">
+    <div class="panel-A">
+      <h1>Inicio sesión</h1>
+      <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="login-form">
+        <h3>
+          <span class="material-symbols-outlined user-icon">
+            account_circle
+          </span>
+        </h3>
+        <div class="form-field" [class.error]="user?.errors && user?.touched">
+          <label for="user"> Usuario </label>
+          <input
+            formControlName="user"
+            type="text"
+            id="user"
+            placeholder="Ingrese el usuario"
+          />
+          @if (user?.errors && user?.touched) {
+          <p [class.error]="user?.errors && user?.touched" class="error-form">
+            *Campo requerido
+          </p>
+          }
+        </div>
+
+        <div
+          class="form-field"
+          [class.error]="password?.errors && password?.touched"
+        >
+          <label for="password" class="password-label">
+            Contraseña
+            <button type="button">
+              @if (inputPasswordType == 'text') {
+              <span (click)="hidePassword()" class="material-symbols-outlined">
+                visibility_off
+              </span>
+              } @else {
+              <span (click)="showPassword()" class="material-symbols-outlined">
+                visibility
+              </span>
+              }
+            </button></label
+          >
+          <input
+            [type]="inputPasswordType"
+            formControlName="password"
+            id="password"
+            placeholder="Ingrese la contraseña"
+          />
+          <p
+            class="error-form"
+            [class.error]="password?.errors && password?.touched"
+          >
+            *Campo requerido
+          </p>
+
+          @if (loginError) {
+          <p class="error-login">
+            El correo electrónico y/o contraseña no son correctos. Por favor
+            vuelve a intentarlo.
+          </p>
+          }
+        </div>
+
+        <button type="submit" class="btn-primary">Iniciar sesión</button>
+      </form>
+    </div>
+
+    <div class="panel-B">
+      <div>
+        <h2 style="margin-top: 2rem">Viviana Montoya</h2>
+        <h2>Auricuroterapia</h2>
+        <img id="logo" src="assets/logo.png" alt="" />
+      </div>
+    </div>
+  </div>
+</div>
