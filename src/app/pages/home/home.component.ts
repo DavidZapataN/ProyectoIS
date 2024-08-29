@@ -119,7 +119,13 @@ export class HomeComponent implements OnInit {
         patient.gender == this.searchGenderQuery && patient.status == 'ACTIVE'
     );
 
-    this.patientsService.patients.set(patientsFound);
+    if (patientsFound.length > 0) {
+      this.patientsService.patients.set(patientsFound);
+    } else {
+      this.NotificationType = NotificationType.Warning;
+      this.message = 'No se encontraron pacientes';
+      this.isNotification = true;
+    }
   }
 
   viewPatientForm(patientStatus: 'NEW' | 'TO_UPDATE', patient?: IPatientModel) {
