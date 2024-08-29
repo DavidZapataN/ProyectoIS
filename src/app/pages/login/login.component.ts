@@ -25,14 +25,6 @@ export class LoginComponent {
     password: ['', Validators.required],
   });
 
-  createPatient(client: IPatientModel) {
-    console.log(this.loginForm);
-
-    const patients = localStorage.getItem('patients');
-
-    return patients;
-  }
-
   showPassword() {
     this.inputPasswordType = 'text';
   }
