@@ -1,0 +1,79 @@
+<div class="background">
+  <div class="modal">
+    <span (click)="closeModal()" class="material-symbols-outlined btn-close"
+      >close</span
+    >
+
+    <h3>Programar nueva cita</h3>
+
+    <div class="content">
+      <div style="width: 100%; display: flex; gap: 4rem; align-items: flex-end">
+        <div class="patient">
+          <p style="border-bottom: 0">
+            <span>Nombre:</span> {{ patient.name }}
+          </p>
+          <p><span>Cédula:</span> {{ patient.id }}</p>
+        </div>
+
+        <div class="schedule-appointment">
+          <label for="nextAppointment">Fecha</label>
+          <input
+            (change)="onDateSelected()"
+            [min]="currentDate"
+            [(ngModel)]="selectedDay"
+            id="nextAppointment"
+            type="date"
+            class="calendar"
+          />
+        </div>
+
+        <button class="btn-primary">Agregar medidas</button>
+      </div>
+
+      @if (availableDates.length > 0) {
+      <p>Horas disponibles</p>
+      <div class="available-hours">
+        @for (date of availableDates; track $index) {
+        <button
+          (click)="selectedDate = date"
+          class="date-to-select"
+          [class.selected]="selectedDate == date"
+        >
+          {{ date | date : "hh:mm a" }}
+        </button>
+        }
+      </div>
+      } @else {
+      <p
+        style="
+          font-size: 2rem;
+          color: var(--primary-color);
+          flex: 1;
+          display: flex;
+          align-items: center;
+        "
+      >
+        No hay horarios disponibles
+      </p>
+      }
+    </div>
+
+    <div style="display: flex; gap: 2rem">
+      <button (click)="saveAppointment()" type="button" class="btn-primary">
+        Agendar
+      </button>
+      <button (click)="closeModal()" type="button" class="btn-primary">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+@if (isNotification) {
+<app-notification
+  (close)="closeNotification()"
+  message="Cita programada éxitosamente"
+  [duration]="5000"
+  [type]="NotificationType.Success"
+></app-notification>
+}

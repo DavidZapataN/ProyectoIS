@@ -15,6 +15,8 @@ import { IAppointmentModel } from '../../Models/IAppointmentModel';
 import { PatientFormComponent } from '../../components/patient-form/patient-form.component';
 import { PatientService } from '../../services/patient.service';
 import { FormsModule } from '@angular/forms';
+import { NewAppointmentComponent } from '../../components/new-appointment/new-appointment.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -22,8 +24,9 @@ import { FormsModule } from '@angular/forms';
   imports: [
     NotificationComponent,
     PatientFormComponent,
-    NotificationComponent,
+    NewAppointmentComponent,
     FormsModule,
+    DatePipe,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -52,8 +55,41 @@ export class HomeComponent implements OnInit {
     status: 'ACTIVE',
   };
 
+  isNewAppointment: boolean = false;
+  patientToSchedule: IPatientModel = {
+    id: '',
+    name: '',
+    age: '',
+    phone: '',
+    gender: 'MALE',
+    appointments: [],
+    status: 'ACTIVE',
+  };
+
   ngOnInit(): void {
+    const appointments = localStorage.getItem('appointments');
+    if (appointments) {
+      const appointmentsArray = this.updateExpiredAppointments(
+        JSON.parse(appointments)
+      );
+      localStorage.setItem('appointments', JSON.stringify(appointmentsArray));
+    }
+
     this.patientsService.patients.set(this.getActivePatients());
+  }
+
+  borrarCitas() {
+    localStorage.removeItem('appointments');
+
+    let patients = this.getActivePatients();
+
+    patients.forEach((patient) => {
+      patient.appointments = [];
+      patient.nextAppointment = undefined;
+      return patient;
+    });
+
+    localStorage.setItem('patients', JSON.stringify(patients));
   }
 
   searchById() {
@@ -169,7 +205,7 @@ export class HomeComponent implements OnInit {
     this.isNotification = true;
   }
 
-  updatePatient(patientToUpdate: IPatientModel) {
+  updatePatient(patientToUpdate: IPatientModel, showNotification: boolean) {
     let patients: IPatientModel[] = this.getAllPatients();
     const index = patients.findIndex((p) => p.id == patientToUpdate.id);
     patients[index] = patientToUpdate;
@@ -195,9 +231,11 @@ export class HomeComponent implements OnInit {
       this.patientsService.patients.set(this.getActivePatients());
     }
 
-    this.NotificationType = NotificationType.Success;
-    this.message = 'Paciente actualizado correctamente';
-    this.isNotification = true;
+    if (showNotification) {
+      this.NotificationType = NotificationType.Success;
+      this.message = 'Paciente actualizado correctamente';
+      this.isNotification = true;
+    }
   }
 
   getActivePatients(): IPatientModel[] {
@@ -210,14 +248,43 @@ export class HomeComponent implements OnInit {
     );
 
     activePatients.forEach((patient) => {
+      patient.appointments = this.updateExpiredAppointments(
+        patient.appointments
+      );
+
       const nextAppointment = this.getNextAppointment(patient.appointments);
-      return {
-        ...patient,
-        nextAppointment,
-      };
+      nextAppointment ? (patient.nextAppointment = nextAppointment) : null;
+      return patient;
     });
 
     return activePatients;
+  }
+
+  viewNewAppointmentForm(patient: IPatientModel) {
+    this.patientToSchedule = patient;
+    this.isNewAppointment = true;
+  }
+
+  updatePatientAppointments(patient: IPatientModel) {
+    patient.appointments = this.updateExpiredAppointments(patient.appointments);
+
+    const nextAppointment = this.getNextAppointment(patient.appointments);
+    nextAppointment ? (patient.nextAppointment = nextAppointment) : null;
+
+    this.updatePatient(patient, false);
+  }
+
+  closeNewAppointmentForm() {
+    this.patientToSchedule = {
+      id: '',
+      name: '',
+      age: '',
+      phone: '',
+      gender: 'MALE',
+      appointments: [],
+      status: 'ACTIVE',
+    };
+    this.isNewAppointment = false;
   }
 
   getNextAppointment(
@@ -236,6 +303,21 @@ export class HomeComponent implements OnInit {
         ? current
         : earliest;
     });
+  }
+
+  updateExpiredAppointments(appointments: IAppointmentModel[]) {
+    const now = new Date();
+
+    appointments.forEach((appointment) => {
+      if (
+        appointment.status === 'PENDING' &&
+        new Date(appointment.date) < now
+      ) {
+        appointment.status = 'EXPIRED';
+      }
+    });
+
+    return appointments;
   }
 
   getAllPatients(): IPatientModel[] {

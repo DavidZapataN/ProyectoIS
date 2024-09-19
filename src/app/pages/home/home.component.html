@@ -4,6 +4,8 @@
     <button class="logout-button" (click)="authService.logout()">
       Cerrar Sesión
     </button>
+
+    <button (click)="borrarCitas()">Borrar</button>
   </header>
 
   @if (patientsService.patients().length > 0) {
@@ -76,6 +78,7 @@
           <th>Sexo</th>
           <th>Próxima cita</th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -87,11 +90,18 @@
           <td>{{ patient.phone }}</td>
           <td>{{ patient.gender == "MALE" ? "Hombre" : "Mujer" }}</td>
           <td>
-            {{
-              patient.nextAppointment
-                ? patient.nextAppointment
-                : "No tiene próximas citas"
-            }}
+            @if (patient.nextAppointment) {
+            {{ patient.nextAppointment.date | date : "dd-MM-yyyy hh:mm a" }}
+            } @else { No tiene próximas citas }
+          </td>
+          <td style="width: 8rem">
+            <button
+              (click)="viewNewAppointmentForm(patient)"
+              class="btn-edit-patient"
+              title="Nueva cita"
+            >
+              <span class="material-symbols-outlined"> event </span>
+            </button>
           </td>
           <td style="width: 8rem">
             <button
@@ -123,12 +133,21 @@
 
 @if (isNewPatientForm) {
 <patient-form
-  (updatePatient)="updatePatient($event)"
+  (updatePatient)="updatePatient($event, true)"
   (savePatient)="createPatient($event)"
   (close)="closePatientForm()"
   [isNewPatient]="isNewPatientInForm"
   [patientToUpdate]="patientToUpdate"
 ></patient-form>
+}
+
+<!--  -->
+@if (isNewAppointment) {
+<new-appointment-modal
+  (updatePatientAppointments)="updatePatientAppointments($event)"
+  (close)="closeNewAppointmentForm()"
+  [patient]="patientToSchedule"
+></new-appointment-modal>
 }
 
 <!--  -->

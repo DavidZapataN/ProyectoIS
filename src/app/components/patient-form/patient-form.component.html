@@ -138,15 +138,7 @@
       </div>
       }
 
-      <div class="form-field schedule-appointment">
-        <label for="nextAppointment">Agendar nueva cita</label>
-        <div>
-          <input id="nextAppointment" type="date" class="calendar" />
-          <button type="button" class="btn-primary">Agendar</button>
-        </div>
-      </div>
-
-      <div class="buttons" [class.toUpdate]="!isNewPatient">
+      <div class="buttons">
         <div>
           <button type="submit" class="btn-primary">Guardar</button>
           <button (click)="closeModal()" type="button" class="btn-primary">

@@ -1,0 +1,104 @@
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0000001a;
+  z-index: 1;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: max-content;
+  height: 58rem;
+  padding: 4rem;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: -20px 19px 19px 5px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.content {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.schedule-appointment {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 1.6rem;
+
+  input {
+    padding: 1.4rem 2rem;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    font-family: var(--main-font);
+    font-size: 1.6rem;
+  }
+}
+
+.patient {
+  display: flex;
+  flex-direction: column;
+
+  p {
+    border: 1.5px solid var(--border);
+    box-sizing: border-box;
+    padding: 1rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+
+    span {
+      width: 8rem;
+    }
+  }
+}
+
+.available-hours {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2rem;
+}
+
+.date-to-select {
+  cursor: pointer;
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+  padding: 1rem;
+  border-radius: 4px;
+  width: 10rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    border: 1px solid black;
+  }
+
+  &.selected {
+    border: 1px solid var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+  }
+}
+
+h3 {
+  color: var(--primary-color);
+}
