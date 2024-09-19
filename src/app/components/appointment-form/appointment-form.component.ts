@@ -14,18 +14,18 @@ import {
   NotificationType,
 } from '../notification/notification.component';
 import { IPatientModel } from '../../Models/IPatientModel';
-import { PatientService } from '../../services/patient.service';
 
 @Component({
-  selector: 'new-appointment-modal',
+  selector: 'appointment-form-modal',
   standalone: true,
   imports: [FormsModule, DatePipe, NotificationComponent],
-  templateUrl: './new-appointment.component.html',
-  styleUrl: './new-appointment.component.scss',
+  templateUrl: './appointment-form.component.html',
+  styleUrl: './appointment-form.component.scss',
 })
-export class NewAppointmentComponent implements OnInit {
+export class AppointmentFormComponent implements OnInit {
   private datePipe = inject(DatePipe);
-  protected patientsService = inject(PatientService);
+
+  @Input() isNewAppointment: boolean = true;
 
   @Input({ required: true }) patient: IPatientModel = {
     id: '',
@@ -42,10 +42,6 @@ export class NewAppointmentComponent implements OnInit {
 
   NotificationType = NotificationType;
   isNotification: boolean = false;
-
-  activeMeasures: boolean = false;
-
-  appointments: IAppointmentModel[] = [];
 
   availableDates: string[] = [];
   currentDate: any;

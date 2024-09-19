@@ -79,6 +79,7 @@
           <th>Próxima cita</th>
           <th></th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -91,12 +92,21 @@
           <td>{{ patient.gender == "MALE" ? "Hombre" : "Mujer" }}</td>
           <td>
             @if (patient.nextAppointment) {
-            {{ patient.nextAppointment.date | date : "dd-MM-yyyy hh:mm a" }}
+            <div class="next-appointment">
+              {{ patient.nextAppointment.date | date : "dd-MM-yyyy hh:mm a" }}
+              <button
+                (click)="viewAppointmentForm('TO_MANAGE', patient)"
+                class="btn-edit-patient"
+                title="Gestionar cita "
+              >
+                <span class="material-symbols-outlined"> more_horiz </span>
+              </button>
+            </div>
             } @else { No tiene próximas citas }
           </td>
           <td style="width: 8rem">
             <button
-              (click)="viewNewAppointmentForm(patient)"
+              (click)="viewAppointmentForm('NEW', patient)"
               class="btn-edit-patient"
               title="Nueva cita"
             >
@@ -110,6 +120,11 @@
               title="Actualizar paciente"
             >
               <span class="material-symbols-outlined"> edit_note </span>
+            </button>
+          </td>
+          <td style="width: 8rem">
+            <button class="btn-edit-patient" title="Ver citas">
+              <span class="material-symbols-outlined"> event_available </span>
             </button>
           </td>
         </tr>
@@ -142,12 +157,18 @@
 }
 
 <!--  -->
-@if (isNewAppointment) {
-<new-appointment-modal
+@if (activeManageAppointment) {
+<appointment-form-modal
   (updatePatientAppointments)="updatePatientAppointments($event)"
-  (close)="closeNewAppointmentForm()"
+  (close)="closeAppointmentForm()"
+  [isNewAppointment]="isNewAppointment"
   [patient]="patientToSchedule"
-></new-appointment-modal>
+></appointment-form-modal>
+}
+
+<!--  -->
+@if (isManageAppointments) {
+<manage-appointments [patient]="patientToSchedule"></manage-appointments>
 }
 
 <!--  -->

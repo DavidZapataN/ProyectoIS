@@ -15,8 +15,9 @@ import { IAppointmentModel } from '../../Models/IAppointmentModel';
 import { PatientFormComponent } from '../../components/patient-form/patient-form.component';
 import { PatientService } from '../../services/patient.service';
 import { FormsModule } from '@angular/forms';
-import { NewAppointmentComponent } from '../../components/new-appointment/new-appointment.component';
+import { AppointmentFormComponent } from '../../components/appointment-form/appointment-form.component';
 import { DatePipe } from '@angular/common';
+import { ManageAppointmentsComponent } from '../../components/manage-appointments/manage-appointments.component';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,8 @@ import { DatePipe } from '@angular/common';
   imports: [
     NotificationComponent,
     PatientFormComponent,
-    NewAppointmentComponent,
+    AppointmentFormComponent,
+    ManageAppointmentsComponent,
     FormsModule,
     DatePipe,
   ],
@@ -55,6 +57,7 @@ export class HomeComponent implements OnInit {
     status: 'ACTIVE',
   };
 
+  activeManageAppointment: boolean = false;
   isNewAppointment: boolean = false;
   patientToSchedule: IPatientModel = {
     id: '',
@@ -65,6 +68,8 @@ export class HomeComponent implements OnInit {
     appointments: [],
     status: 'ACTIVE',
   };
+
+  isManageAppointments: boolean = false;
 
   ngOnInit(): void {
     const appointments = localStorage.getItem('appointments');
@@ -260,21 +265,24 @@ export class HomeComponent implements OnInit {
     return activePatients;
   }
 
-  viewNewAppointmentForm(patient: IPatientModel) {
+  viewAppointmentForm(
+    appointmentStatus: 'NEW' | 'TO_MANAGE',
+    patient: IPatientModel
+  ) {
     this.patientToSchedule = patient;
-    this.isNewAppointment = true;
+
+    if (appointmentStatus == 'NEW') {
+      this.isNewAppointment = true;
+      this.activeManageAppointment = true;
+    }
+
+    if (appointmentStatus == 'TO_MANAGE') {
+      this.isNewAppointment = false;
+      this.activeManageAppointment = true;
+    }
   }
 
-  updatePatientAppointments(patient: IPatientModel) {
-    patient.appointments = this.updateExpiredAppointments(patient.appointments);
-
-    const nextAppointment = this.getNextAppointment(patient.appointments);
-    nextAppointment ? (patient.nextAppointment = nextAppointment) : null;
-
-    this.updatePatient(patient, false);
-  }
-
-  closeNewAppointmentForm() {
+  closeAppointmentForm() {
     this.patientToSchedule = {
       id: '',
       name: '',
@@ -284,7 +292,16 @@ export class HomeComponent implements OnInit {
       appointments: [],
       status: 'ACTIVE',
     };
-    this.isNewAppointment = false;
+    this.activeManageAppointment = false;
+  }
+
+  updatePatientAppointments(patient: IPatientModel) {
+    patient.appointments = this.updateExpiredAppointments(patient.appointments);
+
+    const nextAppointment = this.getNextAppointment(patient.appointments);
+    nextAppointment ? (patient.nextAppointment = nextAppointment) : null;
+
+    this.updatePatient(patient, false);
   }
 
   getNextAppointment(
@@ -309,11 +326,16 @@ export class HomeComponent implements OnInit {
     const now = new Date();
 
     appointments.forEach((appointment) => {
-      if (
-        appointment.status === 'PENDING' &&
-        new Date(appointment.date) < now
-      ) {
-        appointment.status = 'EXPIRED';
+      if (appointment.status === 'PENDING') {
+        const appointmentDate = new Date(appointment.date);
+
+        // Sumar 30 minutos a la fecha de la cita
+        const appointmentDateWithMargin = new Date(appointmentDate);
+        appointmentDateWithMargin.setMinutes(appointmentDate.getMinutes() + 10);
+
+        if (now > appointmentDateWithMargin) {
+          appointment.status = 'EXPIRED';
+        }
       }
     });
 
