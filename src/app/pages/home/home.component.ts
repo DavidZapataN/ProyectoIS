@@ -68,6 +68,21 @@ export class HomeComponent implements OnInit {
     appointments: [],
     status: 'ACTIVE',
   };
+  appointmentToUpdate: IAppointmentModel = {
+    date: '',
+    patientName: '',
+    measures: {
+      weight: 0,
+      height: 0,
+      backMeasurement: 0,
+      upperAbdomenMeasurement: 0,
+      lowerAbdomenMeasurement: 0,
+      hipMeasurement: 0,
+      armMeasurement: 0,
+      legMeasurement: 0,
+    },
+    status: 'PENDING',
+  };
 
   isManageAppointments: boolean = false;
 
@@ -170,6 +185,8 @@ export class HomeComponent implements OnInit {
   }
 
   viewPatientForm(patientStatus: 'NEW' | 'TO_UPDATE', patient?: IPatientModel) {
+    console.log(patient);
+
     if (patientStatus == 'NEW') {
       this.isNewPatientInForm = true;
       this.isNewPatientForm = true;
@@ -211,6 +228,12 @@ export class HomeComponent implements OnInit {
   }
 
   updatePatient(patientToUpdate: IPatientModel, showNotification: boolean) {
+    const nextAppointment = this.getNextAppointment(
+      patientToUpdate.appointments
+    );
+
+    nextAppointment ? (patientToUpdate.nextAppointment = nextAppointment) : '';
+
     let patients: IPatientModel[] = this.getAllPatients();
     const index = patients.findIndex((p) => p.id == patientToUpdate.id);
     patients[index] = patientToUpdate;
@@ -262,6 +285,8 @@ export class HomeComponent implements OnInit {
       return patient;
     });
 
+    localStorage.setItem('patients', JSON.stringify(activePatients));
+
     return activePatients;
   }
 
@@ -295,13 +320,19 @@ export class HomeComponent implements OnInit {
     this.activeManageAppointment = false;
   }
 
-  updatePatientAppointments(patient: IPatientModel) {
+  updatePatientAppointments(patient: IPatientModel, showNotification: boolean) {
     patient.appointments = this.updateExpiredAppointments(patient.appointments);
 
     const nextAppointment = this.getNextAppointment(patient.appointments);
     nextAppointment ? (patient.nextAppointment = nextAppointment) : null;
 
     this.updatePatient(patient, false);
+
+    if (showNotification) {
+      this.NotificationType = NotificationType.Success;
+      this.message = 'Cita programada éxitosamente';
+      this.isNotification = true;
+    }
   }
 
   getNextAppointment(
@@ -347,6 +378,32 @@ export class HomeComponent implements OnInit {
     if (!patientsString) return [];
 
     return JSON.parse(patientsString);
+  }
+
+  viewAppointments(patient: IPatientModel) {
+    if (patient.appointments.length <= 0) {
+      this.NotificationType = NotificationType.Info;
+      this.message = `${patient.name} no tiene citas registradas`;
+      this.isNotification = true;
+      return;
+    }
+
+    this.patientToSchedule = patient;
+    this.isManageAppointments = true;
+  }
+
+  closeAppointmentsModal() {
+    this.patientToSchedule = {
+      id: '',
+      name: '',
+      age: '',
+      phone: '',
+      gender: 'MALE',
+      appointments: [],
+      status: 'ACTIVE',
+    };
+
+    this.isManageAppointments = false;
   }
 
   closeNotification() {

@@ -57,6 +57,8 @@ export class PatientFormComponent implements OnInit {
     if (!this.isNewPatient) {
       this.loadPatientData(this.patientToUpdate);
     }
+
+    console.log(this.patientToUpdate);
   }
 
   loadPatientData(patient: IPatientModel) {
@@ -95,7 +97,7 @@ export class PatientFormComponent implements OnInit {
         age: this.age?.value!,
         phone: this.phone?.value!,
         gender: this.gender?.value! == 'MALE' ? 'MALE' : 'FEMALE',
-        appointments: [],
+        appointments: this.patientToUpdate.appointments,
         status: statusValue,
       };
 

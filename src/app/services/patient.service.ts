@@ -7,6 +7,25 @@ import { IPatientModel } from '../Models/IPatientModel';
 export class PatientService {
   patients: WritableSignal<IPatientModel[]> = signal([]);
 
+  getAllAppointments() {
+    const appointments = localStorage.getItem('appointments');
+    return appointments ? JSON.parse(appointments) : [];
+  }
+
+  // Ordenar de más reciente a más antigua
+  orderByDateDesc(list: any) {
+    list.sort((a: any, b: any) => {
+      return <any>new Date(b.date) - <any>new Date(a.date);
+    });
+  }
+
+  // Ordenar de más antigua a más reciente
+  orderByDateAsc(list: any) {
+    list.sort((a: any, b: any) => {
+      return <any>new Date(a.date) - <any>new Date(b.date);
+    });
+  }
+
   onKeyPress(event: KeyboardEvent): void {
     const input = event.key;
     if (!/^[0-9]$/.test(input) && input !== 'Backspace') {

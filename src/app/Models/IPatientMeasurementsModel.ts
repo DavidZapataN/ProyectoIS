@@ -4,7 +4,7 @@ export interface IPatientMeasurementsModel {
   backMeasurement: number;
   upperAbdomenMeasurement: number;
   lowerAbdomenMeasurement: number;
-  hipMeasurement: number | null;
+  hipMeasurement: number;
   armMeasurement: number;
   legMeasurement: number;
 }

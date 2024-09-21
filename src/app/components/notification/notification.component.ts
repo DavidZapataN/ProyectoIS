@@ -8,7 +8,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
 import { PatientService } from '../../services/patient.service';
 
 @Component({
@@ -19,8 +18,6 @@ import { PatientService } from '../../services/patient.service';
   styleUrl: './notification.component.scss',
 })
 export class NotificationComponent implements OnInit, OnDestroy {
-  private utilsService = inject(PatientService);
-
   @Input() message: string = '';
   @Input() type: NotificationType = NotificationType.Info;
   @Input() duration: number = 5000;

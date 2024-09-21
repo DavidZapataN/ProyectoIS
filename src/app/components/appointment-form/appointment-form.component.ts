@@ -9,11 +9,9 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IAppointmentModel } from '../../Models/IAppointmentModel';
-import {
-  NotificationComponent,
-  NotificationType,
-} from '../notification/notification.component';
+import { NotificationComponent } from '../notification/notification.component';
 import { IPatientModel } from '../../Models/IPatientModel';
+import { PatientService } from '../../services/patient.service';
 
 @Component({
   selector: 'appointment-form-modal',
@@ -24,8 +22,25 @@ import { IPatientModel } from '../../Models/IPatientModel';
 })
 export class AppointmentFormComponent implements OnInit {
   private datePipe = inject(DatePipe);
+  private patientService = inject(PatientService);
 
   @Input() isNewAppointment: boolean = true;
+
+  @Input() appointmentToUpdate: IAppointmentModel = {
+    date: '',
+    patientName: '',
+    measures: {
+      weight: 0,
+      height: 0,
+      backMeasurement: 0,
+      upperAbdomenMeasurement: 0,
+      lowerAbdomenMeasurement: 0,
+      hipMeasurement: 0,
+      armMeasurement: 0,
+      legMeasurement: 0,
+    },
+    status: 'PENDING',
+  };
 
   @Input({ required: true }) patient: IPatientModel = {
     id: '',
@@ -39,9 +54,6 @@ export class AppointmentFormComponent implements OnInit {
 
   @Output() updatePatientAppointments = new EventEmitter<IPatientModel>();
   @Output() close = new EventEmitter<void>();
-
-  NotificationType = NotificationType;
-  isNotification: boolean = false;
 
   availableDates: string[] = [];
   currentDate: any;
@@ -62,26 +74,31 @@ export class AppointmentFormComponent implements OnInit {
     let appointment: IAppointmentModel = {
       date: date.toString(),
       patientName: this.patient.name,
-      measures: [],
+      measures: {
+        weight: 0,
+        height: 0,
+        backMeasurement: 0,
+        upperAbdomenMeasurement: 0,
+        lowerAbdomenMeasurement: 0,
+        hipMeasurement: 0,
+        armMeasurement: 0,
+        legMeasurement: 0,
+      },
       status: 'PENDING',
     };
 
-    const appointments = this.getAllAppointments();
+    const appointments = this.patientService.getAllAppointments();
 
     appointments.push(appointment);
 
     localStorage.setItem('appointments', JSON.stringify(appointments));
 
     this.onDateSelected();
-    this.isNotification = true;
 
     this.patient.appointments.push(appointment);
     this.updatePatientAppointments.emit(this.patient);
-  }
 
-  getAllAppointments() {
-    const appointments = localStorage.getItem('appointments');
-    return appointments ? JSON.parse(appointments) : [];
+    this.closeModal();
   }
 
   onDateSelected() {
@@ -89,7 +106,7 @@ export class AppointmentFormComponent implements OnInit {
   }
 
   getAvailableSlotsForDate(selectedDay: string): string[] {
-    const appointments = this.getAllAppointments();
+    const appointments = this.patientService.getAllAppointments();
     const availableSlots = this.generateAvailableSlots(
       new Date(`${selectedDay}T00:00`)
     );
@@ -142,9 +159,5 @@ export class AppointmentFormComponent implements OnInit {
 
   closeModal() {
     this.close.emit();
-  }
-
-  closeNotification() {
-    this.isNotification = false;
   }
 }

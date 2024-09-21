@@ -66,12 +66,3 @@
     </div>
   </div>
 </div>
-
-@if (isNotification) {
-<app-notification
-  (close)="closeNotification()"
-  message="Cita programada éxitosamente"
-  [duration]="5000"
-  [type]="NotificationType.Success"
-></app-notification>
-}

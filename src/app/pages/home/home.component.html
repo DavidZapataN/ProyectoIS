@@ -87,7 +87,7 @@
         <tr>
           <td>{{ patient.id }}</td>
           <td>{{ patient.name }}</td>
-          <td>{{ patient.age }}</td>
+          <td>{{ patient.age }} años</td>
           <td>{{ patient.phone }}</td>
           <td>{{ patient.gender == "MALE" ? "Hombre" : "Mujer" }}</td>
           <td>
@@ -123,7 +123,11 @@
             </button>
           </td>
           <td style="width: 8rem">
-            <button class="btn-edit-patient" title="Ver citas">
+            <button
+              (click)="viewAppointments(patient)"
+              class="btn-edit-patient"
+              title="Ver citas"
+            >
               <span class="material-symbols-outlined"> event_available </span>
             </button>
           </td>
@@ -159,16 +163,21 @@
 <!--  -->
 @if (activeManageAppointment) {
 <appointment-form-modal
-  (updatePatientAppointments)="updatePatientAppointments($event)"
+  (updatePatientAppointments)="updatePatientAppointments($event, true)"
   (close)="closeAppointmentForm()"
   [isNewAppointment]="isNewAppointment"
   [patient]="patientToSchedule"
+  [appointmentToUpdate]="appointmentToUpdate"
 ></appointment-form-modal>
 }
 
 <!--  -->
 @if (isManageAppointments) {
-<manage-appointments [patient]="patientToSchedule"></manage-appointments>
+<manage-appointments
+  (updatePatientAppointments)="updatePatientAppointments($event, false)"
+  (close)="closeAppointmentsModal()"
+  [patient]="patientToSchedule"
+></manage-appointments>
 }
 
 <!--  -->
