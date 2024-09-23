@@ -11,11 +11,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IAppointmentModel } from '../../Models/IAppointmentModel';
 import { DatePipe } from '@angular/common';
 import { PatientService } from '../../services/patient.service';
+import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
 
 @Component({
   selector: 'edit-appointment',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, AppointmentFormComponent],
   templateUrl: './edit-appointment.component.html',
   styleUrl: './edit-appointment.component.scss',
 })
@@ -51,6 +52,8 @@ export class EditAppointmentComponent implements OnInit {
 
   @Output() updatePatientAppointments = new EventEmitter<IPatientModel>();
   @Output() close = new EventEmitter<void>();
+
+  isRescheduleAppointment: boolean = false;
 
   editAppointmentForm = this.formBuilder.group({
     status: ['', [Validators.required]],
@@ -110,6 +113,18 @@ export class EditAppointmentComponent implements OnInit {
     );
   }
 
+  viewAppointmentForm() {
+    this.isRescheduleAppointment = true;
+  }
+
+  rescheduleAppointment(patient: IPatientModel) {
+    console.log(patient);
+
+    this.updatePatientAppointments.emit(patient);
+
+    this.closeModal();
+  }
+
   updateAppointment() {
     if (!this.editAppointmentForm.valid) {
       this.editAppointmentForm.markAllAsTouched();
@@ -166,6 +181,10 @@ export class EditAppointmentComponent implements OnInit {
 
   closeModal() {
     this.close.emit();
+  }
+
+  closeAppointmetForm() {
+    this.isRescheduleAppointment = false;
   }
 
   get status() {

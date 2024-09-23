@@ -1,4 +1,4 @@
-<div class="background">
+<div class="background" [class.hidden]="isRescheduleAppointment == true">
   <div class="modal">
     <span (click)="closeModal()" class="material-symbols-outlined btn-close"
       >close</span
@@ -8,9 +8,14 @@
       <h3>Datos generales</h3>
 
       <div>
-        <p>
+        <p class="date">
           <span>Fecha:</span>
           <strong>{{ appointmentToUpdate.date | date : "dd-MM-yyyy" }}</strong>
+          @if (appointmentToUpdate.status == 'PENDING') {
+          <button (click)="viewAppointmentForm()" class="btn-primary">
+            Reprogramar
+          </button>
+          }
         </p>
         <p>
           <span>Hora:</span>
@@ -49,7 +54,9 @@
           <div class="form-group">
             <label for="status">Estado</label>
             <select formControlName="status" id="status">
+              @if (appointmentToUpdate.status !== 'DONE') {
               <option value="PENDING">PENDIENTE</option>
+              }
               <option value="DONE">VISTA</option>
               <option value="EXPIRED">VENCIDA</option>
             </select>
@@ -350,3 +357,14 @@
     </div>
   </div>
 </div>
+
+@if (isRescheduleAppointment) {
+<appointment-form-modal
+  (updatePatientAppointments)="rescheduleAppointment($event)"
+  (close)="closeAppointmetForm()"
+  [patient]="patient"
+  [isToRescheduleAppointment]="true"
+  [appointmentToReshedule]="appointmentToUpdate"
+></appointment-form-modal>
+
+}

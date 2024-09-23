@@ -7,12 +7,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IAppointmentModel } from '../../Models/IAppointmentModel';
 import { NotificationComponent } from '../notification/notification.component';
 import { IPatientModel } from '../../Models/IPatientModel';
@@ -26,7 +21,6 @@ import { PatientService } from '../../services/patient.service';
   styleUrl: './appointment-form.component.scss',
 })
 export class AppointmentFormComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
   private datePipe = inject(DatePipe);
   private patientService = inject(PatientService);
 
@@ -38,6 +32,23 @@ export class AppointmentFormComponent implements OnInit {
     gender: 'MALE',
     appointments: [],
     status: 'ACTIVE',
+  };
+
+  @Input() isToRescheduleAppointment: boolean = false;
+  @Input() appointmentToReshedule: IAppointmentModel = {
+    date: '',
+    patientName: '',
+    measures: {
+      weight: 0,
+      height: 0,
+      backMeasurement: 0,
+      upperAbdomenMeasurement: 0,
+      lowerAbdomenMeasurement: 0,
+      hipMeasurement: 0,
+      armMeasurement: 0,
+      legMeasurement: 0,
+    },
+    status: 'PENDING',
   };
 
   @Output() updatePatientAppointments = new EventEmitter<IPatientModel>();
@@ -54,6 +65,28 @@ export class AppointmentFormComponent implements OnInit {
 
     this.selectedDay = this.currentDate;
     this.onDateSelected();
+  }
+
+  resheduleAppointment(appointment: IAppointmentModel) {
+    const appointments: IAppointmentModel[] =
+      this.patientService.getAllAppointments();
+    const index = appointments.findIndex(
+      (app) => app.date === this.appointmentToReshedule.date
+    );
+
+    appointments[index] = appointment;
+
+    localStorage.setItem('appointments', JSON.stringify(appointments));
+
+    const indexArray = this.patient.appointments.findIndex(
+      (app) => app.date == this.appointmentToReshedule.date
+    );
+
+    this.patient.appointments[indexArray] = appointment;
+
+    this.updatePatientAppointments.emit(this.patient);
+
+    this.closeModal();
   }
 
   saveAppointment() {
@@ -74,6 +107,11 @@ export class AppointmentFormComponent implements OnInit {
       },
       status: 'PENDING',
     };
+
+    if (this.isToRescheduleAppointment) {
+      this.resheduleAppointment(appointment);
+      return;
+    }
 
     const appointments = this.patientService.getAllAppointments();
 
