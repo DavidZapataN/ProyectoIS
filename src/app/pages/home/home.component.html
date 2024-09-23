@@ -161,14 +161,22 @@
 }
 
 <!--  -->
-@if (activeManageAppointment) {
+@if (activeNewAppointment) {
 <appointment-form-modal
+  (updatePatientAppointments)="scheduleAppointment($event)"
+  (close)="closeAppointmentForm()"
+  [patient]="patientToSchedule"
+></appointment-form-modal>
+}
+
+<!--  -->
+@if (activeEditAppointment) {
+<edit-appointment
   (updatePatientAppointments)="updatePatientAppointments($event, true)"
   (close)="closeAppointmentForm()"
-  [isNewAppointment]="isNewAppointment"
   [patient]="patientToSchedule"
   [appointmentToUpdate]="appointmentToUpdate"
-></appointment-form-modal>
+></edit-appointment>
 }
 
 <!--  -->

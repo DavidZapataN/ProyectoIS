@@ -121,15 +121,6 @@
   </div>
 </div>
 
-@if (activeEditAppointment) {
-<appointment-form-modal
-  (close)="closeAppointmentForm()"
-  [isNewAppointment]="false"
-  [patient]="patient"
-  [appointmentToUpdate]="appointmentToUpdate"
-></appointment-form-modal>
-}
-
 <!--  DETALLES DE CITA -->
 @if (this.appointmentToViewDetails.date != '') {
 <div class="modal" [class.details]="this.appointmentToViewDetails.date != ''">
@@ -209,4 +200,24 @@
     </div>
   </div>
 </div>
+}
+
+<!--  -->
+@if (activeEditAppointment) {
+<edit-appointment
+  (updatePatientAppointments)="updateAppointment($event)"
+  (close)="closeAppointmentForm()"
+  [patient]="patient"
+  [appointmentToUpdate]="appointmentToUpdate"
+></edit-appointment>
+}
+
+<!--  -->
+@if (isNotification) {
+<app-notification
+  (close)="closeNotification()"
+  [message]="message"
+  [duration]="7000"
+  [type]="NotificationType"
+></app-notification>
 }

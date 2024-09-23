@@ -7,7 +7,12 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { IAppointmentModel } from '../../Models/IAppointmentModel';
 import { NotificationComponent } from '../notification/notification.component';
 import { IPatientModel } from '../../Models/IPatientModel';
@@ -16,31 +21,14 @@ import { PatientService } from '../../services/patient.service';
 @Component({
   selector: 'appointment-form-modal',
   standalone: true,
-  imports: [FormsModule, DatePipe, NotificationComponent],
+  imports: [FormsModule, DatePipe, NotificationComponent, ReactiveFormsModule],
   templateUrl: './appointment-form.component.html',
   styleUrl: './appointment-form.component.scss',
 })
 export class AppointmentFormComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
   private datePipe = inject(DatePipe);
   private patientService = inject(PatientService);
-
-  @Input() isNewAppointment: boolean = true;
-
-  @Input() appointmentToUpdate: IAppointmentModel = {
-    date: '',
-    patientName: '',
-    measures: {
-      weight: 0,
-      height: 0,
-      backMeasurement: 0,
-      upperAbdomenMeasurement: 0,
-      lowerAbdomenMeasurement: 0,
-      hipMeasurement: 0,
-      armMeasurement: 0,
-      legMeasurement: 0,
-    },
-    status: 'PENDING',
-  };
 
   @Input({ required: true }) patient: IPatientModel = {
     id: '',

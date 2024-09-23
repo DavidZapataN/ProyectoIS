@@ -1,0 +1,352 @@
+<div class="background">
+  <div class="modal">
+    <span (click)="closeModal()" class="material-symbols-outlined btn-close"
+      >close</span
+    >
+
+    <div class="patient-data">
+      <h3>Datos generales</h3>
+
+      <div>
+        <p>
+          <span>Fecha:</span>
+          <strong>{{ appointmentToUpdate.date | date : "dd-MM-yyyy" }}</strong>
+        </p>
+        <p>
+          <span>Hora:</span>
+          <strong>{{ appointmentToUpdate.date | date : "hh:mm a" }}</strong>
+        </p>
+        <p>
+          <span>Nombre:</span> <strong> {{ patient.name }}</strong>
+        </p>
+
+        <p>
+          <span>Cédula:</span> <strong>{{ patient.id }}</strong>
+        </p>
+        <p>
+          <span>Edad:</span> <strong>{{ patient.age }} años</strong>
+        </p>
+
+        <p>
+          <span>Teléfono:</span>
+          <strong>{{ patient.phone }}</strong>
+        </p>
+
+        <p>
+          <span>Sexo:</span>
+          <strong>{{ patient.gender == "MALE" ? "Hombre" : "Mujer" }}</strong>
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <h3>Gestionar cita</h3>
+      <form [formGroup]="editAppointmentForm" class="edit-appointment-form">
+        <div
+          class="form-field"
+          [class.error]="status?.errors && status?.touched"
+        >
+          <div class="form-group">
+            <label for="status">Estado</label>
+            <select formControlName="status" id="status">
+              <option value="PENDING">PENDIENTE</option>
+              <option value="DONE">VISTA</option>
+              <option value="EXPIRED">VENCIDA</option>
+            </select>
+          </div>
+          @if (status?.errors && status?.touched) {
+          <p
+            [class.error]="status?.errors && status?.touched"
+            class="error-form"
+          >
+            *Campo requerido
+          </p>
+          }
+        </div>
+
+        <div
+          class="form-field"
+          [class.error]="weight?.errors && weight?.touched"
+        >
+          <div class="form-group">
+            <label for="weight">Peso</label>
+            <input
+              id="weight"
+              type="text"
+              formControlName="weight"
+              placeholder="Ingrese la cédula del paciente"
+              maxlength="10"
+            />
+            @if (weight?.errors && weight?.touched) { @if
+            (weight?.hasError('required')) {
+            <p
+              [class.error]="weight?.errors && weight?.touched"
+              class="error-form"
+            >
+              *Campo requerido
+            </p>
+            } @if (weight?.hasError('pattern')) {
+            <p
+              [class.error]="weight?.errors && weight?.touched"
+              class="error-form"
+            >
+              *Debe ser un valor válido
+            </p>
+            } }
+          </div>
+        </div>
+
+        <div
+          class="form-field"
+          [class.error]="height?.errors && height?.touched"
+        >
+          <div class="form-group">
+            <label for="height">Altura</label>
+            <input
+              id="height"
+              type="text"
+              formControlName="height"
+              placeholder="Ingrese la cédula del paciente"
+              maxlength="10"
+            />
+            @if (height?.errors && height?.touched) { @if
+            (height?.hasError('required')) {
+            <p
+              [class.error]="height?.errors && height?.touched"
+              class="error-form"
+            >
+              *Campo requerido
+            </p>
+            } @if (height?.hasError('pattern')) {
+            <p
+              [class.error]="height?.errors && height?.touched"
+              class="error-form"
+            >
+              *Debe ser un valor válido
+            </p>
+            } }
+          </div>
+        </div>
+
+        <div
+          class="form-field"
+          [class.error]="backMeasurement?.errors && backMeasurement?.touched"
+        >
+          <div class="form-group">
+            <label for="backMeasurement">Espalda</label>
+            <input
+              id="backMeasurement"
+              type="text"
+              formControlName="backMeasurement"
+              placeholder="Ingrese la cédula del paciente"
+              maxlength="10"
+            />
+            @if (backMeasurement?.errors && backMeasurement?.touched) { @if
+            (backMeasurement?.hasError('required')) {
+            <p
+              [class.error]="
+                backMeasurement?.errors && backMeasurement?.touched
+              "
+              class="error-form"
+            >
+              *Campo requerido
+            </p>
+            } @if (backMeasurement?.hasError('pattern')) {
+            <p
+              [class.error]="
+                backMeasurement?.errors && backMeasurement?.touched
+              "
+              class="error-form"
+            >
+              *Debe ser un valor válido
+            </p>
+            } }
+          </div>
+        </div>
+
+        <div
+          class="form-field"
+          [class.error]="
+            upperAbdomenMeasurement?.errors && upperAbdomenMeasurement?.touched
+          "
+        >
+          <div class="form-group">
+            <label for="upperAbdomenMeasurement">Abdomen superior</label>
+            <input
+              id="upperAbdomenMeasurement"
+              type="text"
+              formControlName="upperAbdomenMeasurement"
+              placeholder="Ingrese la cédula del paciente"
+              maxlength="10"
+            />
+            @if (upperAbdomenMeasurement?.errors &&
+            upperAbdomenMeasurement?.touched) { @if
+            (upperAbdomenMeasurement?.hasError('required')) {
+            <p
+              [class.error]="
+                upperAbdomenMeasurement?.errors &&
+                upperAbdomenMeasurement?.touched
+              "
+              class="error-form"
+            >
+              *Campo requerido
+            </p>
+            } @if (upperAbdomenMeasurement?.hasError('pattern')) {
+            <p
+              [class.error]="
+                upperAbdomenMeasurement?.errors &&
+                upperAbdomenMeasurement?.touched
+              "
+              class="error-form"
+            >
+              *Debe ser un valor válido
+            </p>
+            } }
+          </div>
+        </div>
+
+        <div
+          class="form-field"
+          [class.error]="
+            lowerAbdomenMeasurement?.errors && lowerAbdomenMeasurement?.touched
+          "
+        >
+          <div class="form-group">
+            <label for="lowerAbdomenMeasurement">Abdomen inferior </label>
+            <input
+              id="lowerAbdomenMeasurement"
+              type="text"
+              formControlName="lowerAbdomenMeasurement"
+              placeholder="Ingrese la cédula del paciente"
+              maxlength="10"
+            />
+            @if (lowerAbdomenMeasurement?.errors &&
+            lowerAbdomenMeasurement?.touched) { @if
+            (lowerAbdomenMeasurement?.hasError('required')) {
+            <p
+              [class.error]="
+                lowerAbdomenMeasurement?.errors &&
+                lowerAbdomenMeasurement?.touched
+              "
+              class="error-form"
+            >
+              *Campo requerido
+            </p>
+            } @if (lowerAbdomenMeasurement?.hasError('pattern')) {
+            <p
+              [class.error]="
+                lowerAbdomenMeasurement?.errors &&
+                lowerAbdomenMeasurement?.touched
+              "
+              class="error-form"
+            >
+              *Debe ser un valor válido
+            </p>
+            } }
+          </div>
+        </div>
+
+        <div
+          class="form-field"
+          [class.error]="hipMeasurement?.errors && hipMeasurement?.touched"
+        >
+          <div class="form-group">
+            <label for="hipMeasurement">Cadera</label>
+            <input
+              id="hipMeasurement"
+              type="text"
+              formControlName="hipMeasurement"
+              placeholder="Ingrese la cédula del paciente"
+              maxlength="10"
+            />
+            @if (hipMeasurement?.errors && hipMeasurement?.touched) { @if
+            (hipMeasurement?.hasError('required')) {
+            <p
+              [class.error]="hipMeasurement?.errors && hipMeasurement?.touched"
+              class="error-form"
+            >
+              *Campo requerido
+            </p>
+            } @if (hipMeasurement?.hasError('pattern')) {
+            <p
+              [class.error]="hipMeasurement?.errors && hipMeasurement?.touched"
+              class="error-form"
+            >
+              *Debe ser un valor válido
+            </p>
+            } }
+          </div>
+        </div>
+
+        <div
+          class="form-field"
+          [class.error]="armMeasurement?.errors && armMeasurement?.touched"
+        >
+          <div class="form-group">
+            <label for="armMeasurement">Brazo</label>
+            <input
+              id="armMeasurement"
+              type="text"
+              formControlName="armMeasurement"
+              placeholder="Ingrese la cédula del paciente"
+              maxlength="10"
+            />
+            @if (armMeasurement?.errors && armMeasurement?.touched) { @if
+            (armMeasurement?.hasError('required')) {
+            <p
+              [class.error]="armMeasurement?.errors && armMeasurement?.touched"
+              class="error-form"
+            >
+              *Campo requerido
+            </p>
+            } @if (armMeasurement?.hasError('pattern')) {
+            <p
+              [class.error]="armMeasurement?.errors && armMeasurement?.touched"
+              class="error-form"
+            >
+              *Debe ser un valor válido
+            </p>
+            } }
+          </div>
+        </div>
+
+        <div
+          class="form-field"
+          [class.error]="legMeasurement?.errors && legMeasurement?.touched"
+        >
+          <div class="form-group">
+            <label for="legMeasurement">Pierna</label>
+            <input
+              id="legMeasurement"
+              type="text"
+              formControlName="legMeasurement"
+              placeholder="Ingrese la cédula del paciente"
+              maxlength="10"
+            />
+            @if (legMeasurement?.errors && legMeasurement?.touched) { @if
+            (legMeasurement?.hasError('required')) {
+            <p
+              [class.error]="legMeasurement?.errors && legMeasurement?.touched"
+              class="error-form"
+            >
+              *Campo requerido
+            </p>
+            } @if (legMeasurement?.hasError('pattern')) {
+            <p
+              [class.error]="legMeasurement?.errors && legMeasurement?.touched"
+              class="error-form"
+            >
+              *Debe ser un valor válido
+            </p>
+            } }
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="options">
+      <button (click)="updateAppointment()" class="btn-primary">Guardar</button>
+      <button (click)="closeModal()" class="btn-primary">Cancelar</button>
+    </div>
+  </div>
+</div>

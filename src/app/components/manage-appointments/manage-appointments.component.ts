@@ -16,6 +16,7 @@ import {
   NotificationComponent,
   NotificationType,
 } from '../notification/notification.component';
+import { EditAppointmentComponent } from '../edit-appointment/edit-appointment.component';
 
 @Component({
   selector: 'manage-appointments',
@@ -26,6 +27,7 @@ import {
     FormsModule,
     AppointmentFormComponent,
     NotificationComponent,
+    EditAppointmentComponent,
   ],
   templateUrl: './manage-appointments.component.html',
   styleUrl: './manage-appointments.component.scss',
@@ -96,6 +98,14 @@ export class ManageAppointmentsComponent implements OnInit {
     this.appointments = this.patient.appointments;
   }
 
+  updateAppointment(patient: IPatientModel) {
+    this.updatePatientAppointments.emit(patient);
+
+    this.NotificationType = NotificationType.Success;
+    this.message = 'Cita actualizada éxitosamente';
+    this.isNotification = true;
+  }
+
   deleteAppointment(appointment: IAppointmentModel) {
     let appointments: IAppointmentModel[] =
       this.patientService.getAllAppointments();
@@ -112,6 +122,10 @@ export class ManageAppointmentsComponent implements OnInit {
     if (this.patient.appointments.length <= 0) {
       this.closeModal();
     }
+
+    this.NotificationType = NotificationType.Success;
+    this.message = 'Cita borrada éxitosamente';
+    this.isNotification = true;
   }
 
   viewAppointmentToEdit(appointment: IAppointmentModel) {
@@ -187,6 +201,10 @@ export class ManageAppointmentsComponent implements OnInit {
 
   closeModal() {
     this.close.emit();
+  }
+
+  closeNotification() {
+    this.isNotification = false;
   }
 
   getStatusText(status: string): string {

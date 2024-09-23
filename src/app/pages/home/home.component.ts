@@ -1,10 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import {
   NotificationComponent,
@@ -18,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { AppointmentFormComponent } from '../../components/appointment-form/appointment-form.component';
 import { DatePipe } from '@angular/common';
 import { ManageAppointmentsComponent } from '../../components/manage-appointments/manage-appointments.component';
+import { EditAppointmentComponent } from '../../components/edit-appointment/edit-appointment.component';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +22,7 @@ import { ManageAppointmentsComponent } from '../../components/manage-appointment
     PatientFormComponent,
     AppointmentFormComponent,
     ManageAppointmentsComponent,
+    EditAppointmentComponent,
     FormsModule,
     DatePipe,
   ],
@@ -57,8 +53,8 @@ export class HomeComponent implements OnInit {
     status: 'ACTIVE',
   };
 
-  activeManageAppointment: boolean = false;
-  isNewAppointment: boolean = false;
+  activeEditAppointment: boolean = false;
+  activeNewAppointment: boolean = false;
   patientToSchedule: IPatientModel = {
     id: '',
     name: '',
@@ -297,13 +293,12 @@ export class HomeComponent implements OnInit {
     this.patientToSchedule = patient;
 
     if (appointmentStatus == 'NEW') {
-      this.isNewAppointment = true;
-      this.activeManageAppointment = true;
+      this.activeNewAppointment = true;
     }
 
     if (appointmentStatus == 'TO_MANAGE') {
-      this.isNewAppointment = false;
-      this.activeManageAppointment = true;
+      this.appointmentToUpdate = patient.nextAppointment!;
+      this.activeEditAppointment = true;
     }
   }
 
@@ -317,20 +312,31 @@ export class HomeComponent implements OnInit {
       appointments: [],
       status: 'ACTIVE',
     };
-    this.activeManageAppointment = false;
+    this.activeNewAppointment = false;
+    this.activeEditAppointment = false;
+  }
+
+  scheduleAppointment(patient: IPatientModel) {
+    this.updatePatientAppointments(patient, false);
+
+    this.NotificationType = NotificationType.Success;
+    this.message = 'Cita programada éxitosamente';
+    this.isNotification = true;
   }
 
   updatePatientAppointments(patient: IPatientModel, showNotification: boolean) {
     patient.appointments = this.updateExpiredAppointments(patient.appointments);
 
     const nextAppointment = this.getNextAppointment(patient.appointments);
-    nextAppointment ? (patient.nextAppointment = nextAppointment) : null;
+    nextAppointment
+      ? (patient.nextAppointment = nextAppointment)
+      : (patient.nextAppointment = undefined);
 
     this.updatePatient(patient, false);
 
     if (showNotification) {
       this.NotificationType = NotificationType.Success;
-      this.message = 'Cita programada éxitosamente';
+      this.message = 'Cita actualizada éxitosamente';
       this.isNotification = true;
     }
   }
