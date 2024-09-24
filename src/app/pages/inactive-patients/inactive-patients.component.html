@@ -1,1 +1,106 @@
-<p>inactive-patients works!</p>
+<div class="wrapper">
+  <header class="header">
+    <h2 class="title">Viviana Montoya Auriculoterapia</h2>
+    <button class="logout-button" (click)="authService.logout()">
+      Cerrar Sesión
+    </button>
+  </header>
+
+  <div class="content">
+    <div style="display: flex; gap: 2rem; align-items: center">
+      <h4>Paciente inactivos</h4>
+      <button routerLink="/home" class="btn-primary">Regresar</button>
+    </div>
+
+    @if (inactivePatients().length > 0) {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Teléfono</th>
+            <th>Sexo</th>
+            <th>Estado</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (patient of inactivePatients(); track $index) {
+          <tr>
+            <td>{{ patient.id }}</td>
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.age }} años</td>
+            <td>{{ patient.phone }}</td>
+            <td>{{ patient.gender == "MALE" ? "Hombre" : "Mujer" }}</td>
+            <td>
+              {{ patient.status == "INACTIVE" ? "INACTIVO" : "SUSPENDIDO" }}
+            </td>
+            <td style="width: 8rem">
+              <button
+                (click)="activatePatient(patient)"
+                class="btn-edit-patient"
+                title="Activar paciente"
+              >
+                <span class="material-symbols-outlined"> how_to_reg </span>
+              </button>
+            </td>
+            <td style="width: 8rem">
+              <button
+                (click)="viewAlertDeletePatient(patient.id)"
+                class="btn-edit-patient"
+                title="Eliminar paciente"
+              >
+                <span class="material-symbols-outlined"> delete_forever </span>
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    } @else {
+    <div id="alert-no-list">
+      <div>
+        <span class="material-symbols-outlined"> error </span>
+        <h3>No hay pacientes inactivos</h3>
+      </div>
+    </div>
+    }
+  </div>
+</div>
+
+@if (isNotification) {
+<app-notification
+  (close)="closeNotification()"
+  [message]="message"
+  [duration]="7000"
+  [type]="NotificationType"
+></app-notification>
+}
+
+<!--  -->
+@if (isAlertDeletePatient) {
+<div class="background">
+  <div class="alert">
+    <h4>
+      <span class="material-symbols-outlined"> warning </span>
+      Eliminar paciente
+    </h4>
+
+    <h5>¿Está seguro que desea eliminar el paciente de forma definitiva?</h5>
+    <p>Esta acción no se puede deshacer</p>
+
+    <div>
+      <button (click)="deletePatient(patientIdToDelete)" class="btn-primary">
+        Borrar
+      </button>
+      <button (click)="closeAlertDeletePatient()" class="btn-primary">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+}

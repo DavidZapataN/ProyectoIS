@@ -65,6 +65,10 @@
     <button (click)="viewPatientForm('NEW')" class="btn-primary">
       Crear nuevo paciente
     </button>
+
+    <button routerLink="/inactive-patients" class="btn-primary">
+      Ver pacientes inactivos
+    </button>
   </div>
 
   <div class="table-container">
@@ -77,6 +81,7 @@
           <th>Teléfono</th>
           <th>Sexo</th>
           <th>Próxima cita</th>
+          <th></th>
           <th></th>
           <th></th>
           <th></th>
@@ -129,6 +134,15 @@
               title="Ver citas"
             >
               <span class="material-symbols-outlined"> event_available </span>
+            </button>
+          </td>
+          <td style="width: 8rem">
+            <button
+              (click)="viewAlertDeletePatient(patient.id)"
+              class="btn-edit-patient"
+              title="Eliminar paciente"
+            >
+              <span class="material-symbols-outlined"> delete_forever </span>
             </button>
           </td>
         </tr>
@@ -196,4 +210,28 @@
   [duration]="7000"
   [type]="NotificationType"
 ></app-notification>
+}
+
+<!--  -->
+@if (isAlertDeletePatient) {
+<div class="background">
+  <div class="alert">
+    <h4>
+      <span class="material-symbols-outlined"> warning </span>
+      Eliminar paciente
+    </h4>
+
+    <h5>¿Está seguro que desea eliminar el paciente de forma definitiva?</h5>
+    <p>Esta acción no se puede deshacer</p>
+
+    <div>
+      <button (click)="deletePatient(patientIdToDelete)" class="btn-primary">
+        Borrar
+      </button>
+      <button (click)="closeAlertDeletePatient()" class="btn-primary">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
 }

@@ -13,6 +13,7 @@ import { AppointmentFormComponent } from '../../components/appointment-form/appo
 import { DatePipe } from '@angular/common';
 import { ManageAppointmentsComponent } from '../../components/manage-appointments/manage-appointments.component';
 import { EditAppointmentComponent } from '../../components/edit-appointment/edit-appointment.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +26,7 @@ import { EditAppointmentComponent } from '../../components/edit-appointment/edit
     EditAppointmentComponent,
     FormsModule,
     DatePipe,
+    RouterLink,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -82,6 +84,9 @@ export class HomeComponent implements OnInit {
 
   isManageAppointments: boolean = false;
 
+  isAlertDeletePatient: boolean = false;
+  patientIdToDelete: string = '';
+
   ngOnInit(): void {
     const appointments = localStorage.getItem('appointments');
     if (appointments) {
@@ -116,7 +121,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    const patientsArray = this.getAllPatients();
+    const patientsArray = this.patientsService.getAllPatients();
     const patient = patientsArray.find(
       (p) => p.id == this.searchIdQuery && p.status == 'ACTIVE'
     );
@@ -139,7 +144,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    const patientsArray = this.getAllPatients();
+    const patientsArray = this.patientsService.getAllPatients();
     const patientsFound = patientsArray.filter(
       (patient) =>
         patient.name
@@ -165,7 +170,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    const patientsArray = this.getAllPatients();
+    const patientsArray = this.patientsService.getAllPatients();
     const patientsFound = patientsArray.filter(
       (patient) =>
         patient.gender == this.searchGenderQuery && patient.status == 'ACTIVE'
@@ -209,7 +214,7 @@ export class HomeComponent implements OnInit {
   }
 
   createPatient(patient: IPatientModel) {
-    let patientsArray: IPatientModel[] = this.getAllPatients();
+    let patientsArray: IPatientModel[] = this.patientsService.getAllPatients();
     patientsArray.push(patient);
     localStorage.setItem('patients', JSON.stringify(patientsArray));
 
@@ -228,9 +233,11 @@ export class HomeComponent implements OnInit {
       patientToUpdate.appointments
     );
 
-    nextAppointment ? (patientToUpdate.nextAppointment = nextAppointment) : '';
+    nextAppointment
+      ? (patientToUpdate.nextAppointment = nextAppointment)
+      : (patientToUpdate.nextAppointment = undefined);
 
-    let patients: IPatientModel[] = this.getAllPatients();
+    let patients: IPatientModel[] = this.patientsService.getAllPatients();
     const index = patients.findIndex((p) => p.id == patientToUpdate.id);
     patients[index] = patientToUpdate;
     localStorage.setItem('patients', JSON.stringify(patients));
@@ -277,11 +284,12 @@ export class HomeComponent implements OnInit {
       );
 
       const nextAppointment = this.getNextAppointment(patient.appointments);
-      nextAppointment ? (patient.nextAppointment = nextAppointment) : null;
+      nextAppointment
+        ? (patient.nextAppointment = nextAppointment)
+        : (patient.nextAppointment = undefined);
+
       return patient;
     });
-
-    localStorage.setItem('patients', JSON.stringify(activePatients));
 
     return activePatients;
   }
@@ -320,7 +328,7 @@ export class HomeComponent implements OnInit {
     this.updatePatientAppointments(patient, false);
 
     this.NotificationType = NotificationType.Success;
-    this.message = 'Cita programada éxitosamente';
+    this.message = 'Cita programada exitosamente';
     this.isNotification = true;
   }
 
@@ -336,7 +344,7 @@ export class HomeComponent implements OnInit {
 
     if (showNotification) {
       this.NotificationType = NotificationType.Success;
-      this.message = 'Cita actualizada éxitosamente';
+      this.message = 'Cita actualizada exitosamente';
       this.isNotification = true;
     }
   }
@@ -379,13 +387,6 @@ export class HomeComponent implements OnInit {
     return appointments;
   }
 
-  getAllPatients(): IPatientModel[] {
-    const patientsString = localStorage.getItem('patients');
-    if (!patientsString) return [];
-
-    return JSON.parse(patientsString);
-  }
-
   viewAppointments(patient: IPatientModel) {
     if (patient.appointments.length <= 0) {
       this.NotificationType = NotificationType.Info;
@@ -410,6 +411,38 @@ export class HomeComponent implements OnInit {
     };
 
     this.isManageAppointments = false;
+  }
+
+  deletePatient(patientId: string) {
+    const patients = this.patientsService.getAllPatients();
+
+    const updatedPatients = patients.filter(
+      (patient) => patient.id != patientId
+    );
+
+    localStorage.setItem('patients', JSON.stringify(updatedPatients));
+
+    this.patientsService.patients.update((patients) => {
+      patients = patients.filter((patient) => patient.id != patientId);
+
+      return patients;
+    });
+
+    this.closeAlertDeletePatient();
+
+    this.NotificationType = NotificationType.Success;
+    this.message = 'Paciente borrado exitosamente';
+    this.isNotification = true;
+  }
+
+  viewAlertDeletePatient(patientId: string) {
+    this.patientIdToDelete = patientId;
+    this.isAlertDeletePatient = true;
+  }
+
+  closeAlertDeletePatient() {
+    this.patientIdToDelete = '';
+    this.isAlertDeletePatient = false;
   }
 
   closeNotification() {

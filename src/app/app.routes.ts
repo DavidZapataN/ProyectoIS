@@ -12,6 +12,15 @@ export const routes: Routes = [
       import('./pages/home/home.component').then((c) => HomeComponent),
   },
   {
+    path: 'inactive-patients',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./pages/inactive-patients/inactive-patients.component').then(
+        (c) => c.InactivePatientsComponent
+      ),
+  },
+
+  {
     path: 'login',
     title: 'Proyecto IS',
     loadComponent: () =>

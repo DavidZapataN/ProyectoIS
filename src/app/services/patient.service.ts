@@ -7,6 +7,13 @@ import { IPatientModel } from '../Models/IPatientModel';
 export class PatientService {
   patients: WritableSignal<IPatientModel[]> = signal([]);
 
+  getAllPatients(): IPatientModel[] {
+    const patientsString = localStorage.getItem('patients');
+    if (!patientsString) return [];
+
+    return JSON.parse(patientsString);
+  }
+
   getAllAppointments() {
     const appointments = localStorage.getItem('appointments');
     return appointments ? JSON.parse(appointments) : [];

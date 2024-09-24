@@ -102,7 +102,7 @@ export class ManageAppointmentsComponent implements OnInit {
     this.updatePatientAppointments.emit(patient);
 
     this.NotificationType = NotificationType.Success;
-    this.message = 'Cita actualizada éxitosamente';
+    this.message = 'Cita actualizada exitosamente';
     this.isNotification = true;
   }
 
@@ -124,7 +124,7 @@ export class ManageAppointmentsComponent implements OnInit {
     }
 
     this.NotificationType = NotificationType.Success;
-    this.message = 'Cita borrada éxitosamente';
+    this.message = 'Cita borrada exitosamente';
     this.isNotification = true;
   }
 
