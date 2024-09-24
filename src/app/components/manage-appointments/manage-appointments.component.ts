@@ -54,6 +54,7 @@ export class ManageAppointmentsComponent implements OnInit {
 
   appointmentToViewDetails: IAppointmentModel = {
     date: '',
+    patientId: '',
     patientName: '',
     measures: {
       weight: 0,
@@ -75,6 +76,7 @@ export class ManageAppointmentsComponent implements OnInit {
   activeEditAppointment: boolean = false;
   appointmentToUpdate: IAppointmentModel = {
     date: '',
+    patientId: '',
     patientName: '',
     measures: {
       weight: 0,
@@ -114,7 +116,11 @@ export class ManageAppointmentsComponent implements OnInit {
 
     localStorage.setItem('appointments', JSON.stringify(appointments));
 
-    this.patient.appointments = appointments;
+    const patientAppointments = this.patient.appointments.filter(
+      (app) => app.date !== appointment.date
+    );
+
+    this.patient.appointments = patientAppointments;
 
     this.checkAppointments();
     this.updatePatientAppointments.emit(this.patient);
@@ -136,6 +142,7 @@ export class ManageAppointmentsComponent implements OnInit {
   closeAppointmentForm() {
     this.appointmentToUpdate = {
       date: '',
+      patientId: '',
       patientName: '',
       measures: {
         weight: 0,
@@ -160,6 +167,7 @@ export class ManageAppointmentsComponent implements OnInit {
   closeAppointmentDetails() {
     this.appointmentToViewDetails = {
       date: '',
+      patientId: '',
       patientName: '',
       measures: {
         weight: 0,

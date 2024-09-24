@@ -37,6 +37,7 @@ export class AppointmentFormComponent implements OnInit {
   @Input() isToRescheduleAppointment: boolean = false;
   @Input() appointmentToReshedule: IAppointmentModel = {
     date: '',
+    patientId: '',
     patientName: '',
     measures: {
       weight: 0,
@@ -94,6 +95,7 @@ export class AppointmentFormComponent implements OnInit {
 
     let appointment: IAppointmentModel = {
       date: date.toString(),
+      patientId: this.patient.id,
       patientName: this.patient.name,
       measures: {
         weight: 0,

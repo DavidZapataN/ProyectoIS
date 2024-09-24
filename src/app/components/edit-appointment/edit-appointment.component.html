@@ -54,9 +54,7 @@
           <div class="form-group">
             <label for="status">Estado</label>
             <select formControlName="status" id="status">
-              @if (appointmentToUpdate.status !== 'DONE') {
               <option value="PENDING">PENDIENTE</option>
-              }
               <option value="DONE">VISTA</option>
               <option value="EXPIRED">VENCIDA</option>
             </select>

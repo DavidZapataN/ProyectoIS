@@ -69,6 +69,10 @@
     <button routerLink="/inactive-patients" class="btn-primary">
       Ver pacientes inactivos
     </button>
+
+    <button (click)="viewDailyAgenda()" class="btn-primary">
+      Ver citas del día
+    </button>
   </div>
 
   <div class="table-container">
@@ -172,6 +176,14 @@
   [isNewPatient]="isNewPatientInForm"
   [patientToUpdate]="patientToUpdate"
 ></patient-form>
+}
+
+<!--  -->
+@if (isDailyAgenda) {
+<daily-agenda
+  (updatePatientAppointments)="updatePatientAppointments($event, false)"
+  (close)="closeDailyAgenda()"
+></daily-agenda>
 }
 
 <!--  -->

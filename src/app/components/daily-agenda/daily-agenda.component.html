@@ -1,0 +1,52 @@
+<div class="background">
+  <div class="modal">
+    <span (click)="closeModal()" class="material-symbols-outlined btn-close"
+      >close</span
+    >
+
+    <h4>
+      Citas del día <strong>{{ now | date : "dd-MM-yyyy" }}</strong>
+    </h4>
+
+    <div class="appointments">
+      @for (appointment of appointments; track $index) {
+      <div class="appointment">
+        <p>
+          <span>Paciente:</span>
+          <strong> {{ appointment.patientName }} </strong>
+        </p>
+        <p>
+          <span>Hora:</span>
+          <strong>{{ appointment.date | date : "hh:mm a" }}</strong>
+        </p>
+
+        <div>
+          <button
+            (click)="updateAppointmentStatus(appointment, 'DONE')"
+            class="btn-primary done"
+            title="Marcar como vista"
+          >
+            <span class="material-symbols-outlined"> event_available </span>
+          </button>
+          <button
+            (click)="updateAppointmentStatus(appointment, 'EXPIRED')"
+            class="btn-primary expired"
+            title="Marcar como vencida"
+          >
+            <span class="material-symbols-outlined"> event_busy </span>
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+@if (isNotification) {
+<app-notification
+  (close)="closeNotification()"
+  [message]="message"
+  [duration]="7000"
+  [type]="NotificationType"
+></app-notification>
+}

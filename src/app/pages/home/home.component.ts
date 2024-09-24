@@ -14,6 +14,7 @@ import { DatePipe } from '@angular/common';
 import { ManageAppointmentsComponent } from '../../components/manage-appointments/manage-appointments.component';
 import { EditAppointmentComponent } from '../../components/edit-appointment/edit-appointment.component';
 import { RouterLink } from '@angular/router';
+import { DailyAgendaComponent } from '../../components/daily-agenda/daily-agenda.component';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ import { RouterLink } from '@angular/router';
     AppointmentFormComponent,
     ManageAppointmentsComponent,
     EditAppointmentComponent,
+    DailyAgendaComponent,
     FormsModule,
     DatePipe,
     RouterLink,
@@ -68,6 +70,7 @@ export class HomeComponent implements OnInit {
   };
   appointmentToUpdate: IAppointmentModel = {
     date: '',
+    patientId: '',
     patientName: '',
     measures: {
       weight: 0,
@@ -86,6 +89,8 @@ export class HomeComponent implements OnInit {
 
   isAlertDeletePatient: boolean = false;
   patientIdToDelete: string = '';
+
+  isDailyAgenda: boolean = false;
 
   ngOnInit(): void {
     const appointments = localStorage.getItem('appointments');
@@ -111,6 +116,23 @@ export class HomeComponent implements OnInit {
     });
 
     localStorage.setItem('patients', JSON.stringify(patients));
+  }
+
+  viewDailyAgenda() {
+    this.isNotification = false;
+    const appointments = this.patientsService.getAllAppointments();
+
+    if (appointments.length > 0) {
+      this.isDailyAgenda = true;
+    } else {
+      this.NotificationType = NotificationType.Info;
+      this.message = 'No hay citas programadas el día de hoy';
+      this.isNotification = true;
+    }
+  }
+
+  closeDailyAgenda() {
+    this.isDailyAgenda = false;
   }
 
   searchById() {
@@ -186,7 +208,7 @@ export class HomeComponent implements OnInit {
   }
 
   viewPatientForm(patientStatus: 'NEW' | 'TO_UPDATE', patient?: IPatientModel) {
-    console.log(patient);
+    this.isNotification = false;
 
     if (patientStatus == 'NEW') {
       this.isNewPatientInForm = true;
@@ -214,6 +236,8 @@ export class HomeComponent implements OnInit {
   }
 
   createPatient(patient: IPatientModel) {
+    this.isNotification = false;
+
     let patientsArray: IPatientModel[] = this.patientsService.getAllPatients();
     patientsArray.push(patient);
     localStorage.setItem('patients', JSON.stringify(patientsArray));
@@ -229,6 +253,8 @@ export class HomeComponent implements OnInit {
   }
 
   updatePatient(patientToUpdate: IPatientModel, showNotification: boolean) {
+    this.isNotification = false;
+
     const nextAppointment = this.getNextAppointment(
       patientToUpdate.appointments
     );
@@ -298,6 +324,8 @@ export class HomeComponent implements OnInit {
     appointmentStatus: 'NEW' | 'TO_MANAGE',
     patient: IPatientModel
   ) {
+    this.isNotification = false;
+
     this.patientToSchedule = patient;
 
     if (appointmentStatus == 'NEW') {
@@ -325,6 +353,8 @@ export class HomeComponent implements OnInit {
   }
 
   scheduleAppointment(patient: IPatientModel) {
+    this.isNotification = false;
+
     this.updatePatientAppointments(patient, false);
 
     this.NotificationType = NotificationType.Success;
@@ -333,6 +363,8 @@ export class HomeComponent implements OnInit {
   }
 
   updatePatientAppointments(patient: IPatientModel, showNotification: boolean) {
+    this.isNotification = false;
+
     patient.appointments = this.updateExpiredAppointments(patient.appointments);
 
     const nextAppointment = this.getNextAppointment(patient.appointments);
@@ -374,7 +406,6 @@ export class HomeComponent implements OnInit {
       if (appointment.status === 'PENDING') {
         const appointmentDate = new Date(appointment.date);
 
-        // Sumar 30 minutos a la fecha de la cita
         const appointmentDateWithMargin = new Date(appointmentDate);
         appointmentDateWithMargin.setMinutes(appointmentDate.getMinutes() + 10);
 
@@ -388,6 +419,8 @@ export class HomeComponent implements OnInit {
   }
 
   viewAppointments(patient: IPatientModel) {
+    this.isNotification = false;
+
     if (patient.appointments.length <= 0) {
       this.NotificationType = NotificationType.Info;
       this.message = `${patient.name} no tiene citas registradas`;
@@ -414,6 +447,8 @@ export class HomeComponent implements OnInit {
   }
 
   deletePatient(patientId: string) {
+    this.isNotification = false;
+
     const patients = this.patientsService.getAllPatients();
 
     const updatedPatients = patients.filter(
@@ -436,6 +471,8 @@ export class HomeComponent implements OnInit {
   }
 
   viewAlertDeletePatient(patientId: string) {
+    this.isNotification = false;
+
     this.patientIdToDelete = patientId;
     this.isAlertDeletePatient = true;
   }

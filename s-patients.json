@@ -1,99 +1,77 @@
-  [
-    {
-      "id": "1234567890",
-      "name": "Santiago Giraldo Garcia",
-      "age": "21",
-      "phone": "3211323433",
-      "gender": "MALE",
-      "appointments": [
-        {
-          "date": "Mon Sep 23 2024 16:00:00 GMT-0500 (hora estándar de Colombia)",
-          "patientName": "Santiago Giraldo Garcia",
-          "measures": {
-            "weight": 0,
-            "height": 0,
-            "backMeasurement": 0,
-            "upperAbdomenMeasurement": 0,
-            "lowerAbdomenMeasurement": 0,
-            "hipMeasurement": 0,
-            "armMeasurement": 0,
-            "legMeasurement": 0
-          },
-          "status": "EXPIRED"
-        },
-        {
-          "date": "Tue Sep 24 2024 08:30:00 GMT-0500 (hora estándar de Colombia)",
-          "patientName": "Santiago Giraldo Garcia",
-          "measures": {
-            "weight": 0,
-            "height": 0,
-            "backMeasurement": 0,
-            "upperAbdomenMeasurement": 0,
-            "lowerAbdomenMeasurement": 0,
-            "hipMeasurement": 0,
-            "armMeasurement": 0,
-            "legMeasurement": 0
-          },
-          "status": "DONE"
-        },
-        {
-          "date": "Mon Sep 23 2024 19:30:00 GMT-0500 (hora estándar de Colombia)",
-          "patientName": "Santiago Giraldo Garcia",
-          "measures": {
-            "weight": 0,
-            "height": 0,
-            "backMeasurement": 0,
-            "upperAbdomenMeasurement": 0,
-            "lowerAbdomenMeasurement": 0,
-            "hipMeasurement": 0,
-            "armMeasurement": 0,
-            "legMeasurement": 0
-          },
-          "status": "PENDING"
-        }
-      ],
-      "status": "ACTIVE",
-      "nextAppointment": {
-        "date": "Mon Sep 23 2024 16:00:00 GMT-0500 (hora estándar de Colombia)",
-        "patientName": "Santiago Giraldo Garcia",
-        "measures": {
-          "weight": 0,
-          "height": 0,
-          "backMeasurement": 0,
-          "upperAbdomenMeasurement": 0,
-          "lowerAbdomenMeasurement": 0,
-          "hipMeasurement": 0,
-          "armMeasurement": 0,
-          "legMeasurement": 0
-        },
-        "status": "PENDING"
-      }
+[
+  {
+    "date": "Tue Sep 24 2024 12:00:00 GMT-0500 (hora estándar de Colombia)",
+    "patientName": "Juanita Juarez Jimenez",
+    "measures": {
+      "weight": 0,
+      "height": 0,
+      "backMeasurement": 0,
+      "upperAbdomenMeasurement": 0,
+      "lowerAbdomenMeasurement": 0,
+      "hipMeasurement": 0,
+      "armMeasurement": 0,
+      "legMeasurement": 0
     },
-    {
-      "id": "4321231231",
-      "name": "Juanita Juarez Jimenez",
-      "age": "21",
-      "phone": "3232342343",
-      "gender": "FEMALE",
-      "appointments": [],
-      "status": "ACTIVE"
+    "status": "PENDING"
+  },
+  {
+    "date": "Tue Sep 24 2024 11:55:00 GMT-0500 (hora estándar de Colombia)",
+    "patientName": "Juanita Juarez Jimenez",
+    "measures": {
+      "weight": 0,
+      "height": 0,
+      "backMeasurement": 0,
+      "upperAbdomenMeasurement": 0,
+      "lowerAbdomenMeasurement": 0,
+      "hipMeasurement": 0,
+      "armMeasurement": 0,
+      "legMeasurement": 0
     },
-    {
-      "id": "123456789",
-      "name": "David Zapata",
-      "age": "23",
-      "phone": "3232131232",
-      "gender": "MALE",
-      "appointments": [],
-      "status": "ACTIVE"
+    "status": "PENDING"
+  },
+  {
+    "date": "Tue Sep 24 2024 12:05:00 GMT-0500 (hora estándar de Colombia)",
+    "patientName": "Santiago Giraldo Garcia",
+    "measures": {
+      "weight": 0,
+      "height": 0,
+      "backMeasurement": 0,
+      "upperAbdomenMeasurement": 0,
+      "lowerAbdomenMeasurement": 0,
+      "hipMeasurement": 0,
+      "armMeasurement": 0,
+      "legMeasurement": 0
     },
-    {
-      "id": "2132321312",
-      "name": "Daniel Aranguen Bermudez",
-      "age": "18",
-      "phone": "3443544324",
-      "gender": "MALE",
-      "appointments": [],
-      "status": "ACTIVE"
-    }
-  ]
+    "status": "PENDING"
+  },
+  {
+    "date": "Tue Sep 24 2024 19:30:00 GMT-0500 (hora estándar de Colombia)",
+    "patientName": "Santiago Giraldo Garcia",
+    "measures": {
+      "weight": 0,
+      "height": 0,
+      "backMeasurement": 0,
+      "upperAbdomenMeasurement": 0,
+      "lowerAbdomenMeasurement": 0,
+      "hipMeasurement": 0,
+      "armMeasurement": 0,
+      "legMeasurement": 0
+    },
+    "status": "PENDING"
+  },
+  {
+    "date": "Tue Sep 24 2024 13:30:00 GMT-0500 (hora estándar de Colombia)",
+    "patientName": "Juanita Juarez Jimenez",
+    "measures": {
+      "weight": 0,
+      "height": 0,
+      "backMeasurement": 0,
+      "upperAbdomenMeasurement": 0,
+      "lowerAbdomenMeasurement": 0,
+      "hipMeasurement": 0,
+      "armMeasurement": 0,
+      "legMeasurement": 0
+    },
+    "status": "PENDING"
+  }
+]

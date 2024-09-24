@@ -36,6 +36,7 @@ export class EditAppointmentComponent implements OnInit {
 
   @Input() appointmentToUpdate: IAppointmentModel = {
     date: '',
+    patientId: '',
     patientName: '',
     measures: {
       weight: 0,
@@ -143,6 +144,7 @@ export class EditAppointmentComponent implements OnInit {
 
     const appointment: IAppointmentModel = {
       date: this.appointmentToUpdate.date,
+      patientId: this.appointmentToUpdate.patientId,
       patientName: this.appointmentToUpdate.patientName,
       measures: {
         weight: parseFloat(this.weight?.value!),
