@@ -113,6 +113,7 @@
             </div>
             } @else { No tiene próximas citas }
           </td>
+
           <td style="width: 8rem">
             <button
               (click)="viewAppointmentForm('NEW', patient)"
@@ -122,15 +123,7 @@
               <span class="material-symbols-outlined"> event </span>
             </button>
           </td>
-          <td style="width: 8rem">
-            <button
-              (click)="viewPatientForm('TO_UPDATE', patient)"
-              class="btn-edit-patient"
-              title="Actualizar paciente"
-            >
-              <span class="material-symbols-outlined"> edit_note </span>
-            </button>
-          </td>
+
           <td style="width: 8rem">
             <button
               (click)="viewAppointments(patient)"
@@ -140,6 +133,17 @@
               <span class="material-symbols-outlined"> event_available </span>
             </button>
           </td>
+
+          <td style="width: 8rem">
+            <button
+              (click)="viewPatientForm('TO_UPDATE', patient)"
+              class="btn-edit-patient"
+              title="Actualizar paciente"
+            >
+              <span class="material-symbols-outlined"> edit_note </span>
+            </button>
+          </td>
+
           <td style="width: 8rem">
             <button
               (click)="viewAlertDeletePatient(patient.id)"
@@ -163,6 +167,10 @@
 
     <button (click)="viewPatientForm('NEW')" class="btn-primary">
       Crear nuevo paciente
+    </button>
+
+    <button routerLink="/inactive-patients" class="btn-primary">
+      Ver pacientes inactivos
     </button>
   </div>
   }

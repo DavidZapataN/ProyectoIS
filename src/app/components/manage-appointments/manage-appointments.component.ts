@@ -220,7 +220,7 @@ export class ManageAppointmentsComponent implements OnInit {
       case 'PENDING':
         return 'PENDIENTE';
       case 'DONE':
-        return 'VISTA';
+        return 'REALIZADA';
       case 'EXPIRED':
         return 'VENCIDA';
       default:

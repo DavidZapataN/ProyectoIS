@@ -18,7 +18,7 @@
         >
           <option value="all">Todas</option>
           <option value="PENDING">PENDIENTE</option>
-          <option value="DONE">VISTA</option>
+          <option value="DONE">REALIZADA</option>
           <option value="EXPIRED">VENCIDA</option>
         </select>
 
@@ -35,7 +35,7 @@
         PENDIENTE }
       </p>
       <p class="alert-no-list">
-        @if (searchByStatusQuery == 'DONE') { No hay citas en estado VISTA }
+        @if (searchByStatusQuery == 'DONE') { No hay citas en estado REALIZADA }
       </p>
       <p class="alert-no-list">
         @if (searchByStatusQuery == 'EXPIRED') { No hay citas en estado VENCIDA

@@ -91,6 +91,8 @@ export class AppointmentFormComponent implements OnInit {
   }
 
   saveAppointment() {
+    if (this.selectedDate == '') return;
+
     const date = new Date(this.selectedDate);
 
     let appointment: IAppointmentModel = {

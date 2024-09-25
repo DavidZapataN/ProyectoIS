@@ -55,7 +55,7 @@
             <label for="status">Estado</label>
             <select formControlName="status" id="status">
               <option value="PENDING">PENDIENTE</option>
-              <option value="DONE">VISTA</option>
+              <option value="DONE">REALIZADA</option>
               <option value="EXPIRED">VENCIDA</option>
             </select>
           </div>
@@ -79,7 +79,6 @@
               id="weight"
               type="text"
               formControlName="weight"
-              placeholder="Ingrese la cédula del paciente"
               maxlength="10"
             />
             @if (weight?.errors && weight?.touched) { @if
@@ -111,7 +110,6 @@
               id="height"
               type="text"
               formControlName="height"
-              placeholder="Ingrese la cédula del paciente"
               maxlength="10"
             />
             @if (height?.errors && height?.touched) { @if
@@ -143,7 +141,6 @@
               id="backMeasurement"
               type="text"
               formControlName="backMeasurement"
-              placeholder="Ingrese la cédula del paciente"
               maxlength="10"
             />
             @if (backMeasurement?.errors && backMeasurement?.touched) { @if
@@ -181,7 +178,6 @@
               id="upperAbdomenMeasurement"
               type="text"
               formControlName="upperAbdomenMeasurement"
-              placeholder="Ingrese la cédula del paciente"
               maxlength="10"
             />
             @if (upperAbdomenMeasurement?.errors &&
@@ -222,7 +218,6 @@
               id="lowerAbdomenMeasurement"
               type="text"
               formControlName="lowerAbdomenMeasurement"
-              placeholder="Ingrese la cédula del paciente"
               maxlength="10"
             />
             @if (lowerAbdomenMeasurement?.errors &&
@@ -261,7 +256,6 @@
               id="hipMeasurement"
               type="text"
               formControlName="hipMeasurement"
-              placeholder="Ingrese la cédula del paciente"
               maxlength="10"
             />
             @if (hipMeasurement?.errors && hipMeasurement?.touched) { @if
@@ -293,7 +287,6 @@
               id="armMeasurement"
               type="text"
               formControlName="armMeasurement"
-              placeholder="Ingrese la cédula del paciente"
               maxlength="10"
             />
             @if (armMeasurement?.errors && armMeasurement?.touched) { @if
@@ -325,7 +318,6 @@
               id="legMeasurement"
               type="text"
               formControlName="legMeasurement"
-              placeholder="Ingrese la cédula del paciente"
               maxlength="10"
             />
             @if (legMeasurement?.errors && legMeasurement?.touched) { @if
