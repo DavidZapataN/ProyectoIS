@@ -120,9 +120,22 @@ export class HomeComponent implements OnInit {
 
   viewDailyAgenda() {
     this.isNotification = false;
-    const appointments = this.patientsService.getAllAppointments();
+    const appointments: IAppointmentModel[] =
+      this.patientsService.getAllAppointments();
 
-    if (appointments.length > 0) {
+    const appointmetsCurrentDay = appointments.filter((appointment) => {
+      const now = new Date();
+
+      const appointmentDate = new Date(appointment.date);
+
+      const isSameDay = now.toDateString() === appointmentDate.toDateString();
+
+      const isAfterNow = appointmentDate.getTime() > now.getTime();
+
+      return isSameDay && isAfterNow && appointment.status == 'PENDING';
+    });
+
+    if (appointmetsCurrentDay.length > 0) {
       this.isDailyAgenda = true;
     } else {
       this.NotificationType = NotificationType.Info;
